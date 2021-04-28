@@ -1,2 +1,4 @@
 /.idea/*
 env
+/despieces/__pycache__/*
+/despieces/settings/__pycache__/*
