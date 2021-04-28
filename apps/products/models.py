@@ -1,5 +1,6 @@
 from django.db import models
 from model_utils.models import TimeStampedModel
+from django.utils.translation import gettext_lazy as _
 
 
 class Product(TimeStampedModel):
@@ -31,17 +32,17 @@ class Composition(TimeStampedModel):
 
 class Rule(TimeStampedModel):
     class Attribute(models.TextChoices):
-        WIDTH = 'W', "Ancho"
-        HIGH = 'H', "Alto"
-        LONG = 'L', "Largo"
+        WIDTH = 'W', _("Ancho")
+        HIGH = 'H', _("Alto")
+        LONG = 'L', _("Largo")
 
     class Operation(models.TextChoices):
         SUM = 'SUM', "Sumar"
-        Subtract = 'SUB', "Restar"
+        SUBTRACT = 'SUB', "Restar"
         MULTIPLY = 'MUL', "Multiplicar"
 
-    attribute = models.CharField('Atributo', choices=Attribute.choices, max_length=10),
-    operation = models.CharField('Operación', choices=Operation.choices, max_length=10),
+    attribute = models.CharField(max_length=50, choices=Attribute.choices, verbose_name='Atributo')
+    operation = models.CharField(max_length=50, choices=Operation.choices, verbose_name='Operación')
     value = models.IntegerField('Valor')
     composition = models.ForeignKey(Composition, on_delete=models.CASCADE, related_name='rules')
     
