@@ -3,3 +3,5 @@ env
 /despieces/__pycache__/*
 /despieces/settings/__pycache__/*
 /despieces/settings/.env
+/apps/__pycache__/*
+__pycache__
