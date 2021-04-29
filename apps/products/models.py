@@ -43,7 +43,7 @@ class Rule(TimeStampedModel):
 
     attribute = models.CharField(max_length=50, choices=Attribute.choices, verbose_name='Atributo')
     operation = models.CharField(max_length=50, choices=Operation.choices, verbose_name='Operación')
-    value = models.IntegerField('Valor')
+    value = models.DecimalField('Valor', max_digits=10, decimal_places=5)
     composition = models.ForeignKey(Composition, on_delete=models.CASCADE, related_name='rules')
     
    
