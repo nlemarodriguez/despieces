@@ -57,6 +57,11 @@ class QuarteringTestCase(TestCase):
         Rule.objects.create(attribute=Rule.Attribute.LONG, operation=Rule.Operation.MULTIPLY, value=10,
                             composition=t_composition9)
 
+        t_material10 = Material.objects.create(name=f'Material10', price=10, description=f'Descripción10')
+        t_composition10 = Composition.objects.create(material=t_material10, product=t_product1, quantity=5)
+        Rule.objects.create(attribute=Rule.Attribute.LONG, operation=Rule.Operation.MULTIPLY, value=10,
+                            composition=t_composition10)
+
         # Create quotation and the trigger should create a Quartering
         Quotation.objects.create(width=Distance(cm=10), high=Distance(cm=10), long=Distance(cm=10), product=t_product1)
 
@@ -95,4 +100,8 @@ class QuarteringTestCase(TestCase):
     def test_quartering_mul_long(self):
         quartering = Quartering.objects.get(composition__material__name='Material9')
         self.assertEquals(quartering.long, Distance(cm=100))
+
+    def test_composition_gt_zero(self):
+        quartering = Quartering.objects.filter(composition__material__name='Material10').count()
+        self.assertEquals(quartering, 5)
 
