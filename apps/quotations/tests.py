@@ -11,56 +11,25 @@ class QuarteringTestCase(TestCase):
     def setUpTestData(cls):
         # Create a product
         t_product1 = Product.objects.create(name='Product1', description='Descripción 1', is_global=False)
-        # Create compositions with each type of rule attribute and rule operation 3x3
-        t_material1 = Material.objects.create(name=f'Material1', price=10, description=f'Descripción1')
-        t_composition1 = Composition.objects.create(material=t_material1, product=t_product1, quantity=1)
-        Rule.objects.create(attribute=Rule.Attribute.WIDTH, operation=Rule.Operation.SUM, value=10,
-                            composition=t_composition1)
+        # Create compositions with each type of attribute rule and operation rule 3x3
+        for i in range(3):
+            for j in range(3):
+                t_material = Material.objects.create(name=f'Material{i*3+j+1}', price=10,
+                                                     description=f'Descripción{i*3+j+1}', is_measurable=True)
+                t_composition = Composition.objects.create(material=t_material, product=t_product1, quantity=1)
+                Rule.objects.create(attribute=Rule.Attribute.choices[i][0], operation=Rule.Operation.choices[j][0],
+                                    value=10, composition=t_composition)
 
-        t_material2 = Material.objects.create(name=f'Material2', price=10, description=f'Descripción2')
-        t_composition2 = Composition.objects.create(material=t_material2, product=t_product1, quantity=1)
-        Rule.objects.create(attribute=Rule.Attribute.WIDTH, operation=Rule.Operation.SUBTRACT, value=10,
-                            composition=t_composition2)
-
-        t_material3 = Material.objects.create(name=f'Material3', price=10, description=f'Descripción3')
-        t_composition3 = Composition.objects.create(material=t_material3, product=t_product1, quantity=1)
-        Rule.objects.create(attribute=Rule.Attribute.WIDTH, operation=Rule.Operation.MULTIPLY, value=0.5,
-                            composition=t_composition3)
-
-        t_material4 = Material.objects.create(name=f'Material4', price=10, description=f'Descripción4')
-        t_composition4 = Composition.objects.create(material=t_material4, product=t_product1, quantity=1)
-        Rule.objects.create(attribute=Rule.Attribute.HIGH, operation=Rule.Operation.SUM, value=100,
-                            composition=t_composition4)
-
-        t_material5 = Material.objects.create(name=f'Material5', price=10, description=f'Descripción5')
-        t_composition5 = Composition.objects.create(material=t_material5, product=t_product1, quantity=1)
-        Rule.objects.create(attribute=Rule.Attribute.HIGH, operation=Rule.Operation.SUBTRACT, value=10,
-                            composition=t_composition5)
-
-        t_material6 = Material.objects.create(name=f'Material6', price=10, description=f'Descripción6')
-        t_composition6 = Composition.objects.create(material=t_material6, product=t_product1, quantity=1)
-        Rule.objects.create(attribute=Rule.Attribute.HIGH, operation=Rule.Operation.MULTIPLY, value=10,
-                            composition=t_composition6)
-
-        t_material7 = Material.objects.create(name=f'Material7', price=10, description=f'Descripción7')
-        t_composition7 = Composition.objects.create(material=t_material7, product=t_product1, quantity=1)
-        Rule.objects.create(attribute=Rule.Attribute.LONG, operation=Rule.Operation.SUM, value=10,
-                            composition=t_composition7)
-
-        t_material8 = Material.objects.create(name=f'Material8', price=10, description=f'Descripción8')
-        t_composition8 = Composition.objects.create(material=t_material8, product=t_product1, quantity=1)
-        Rule.objects.create(attribute=Rule.Attribute.LONG, operation=Rule.Operation.SUBTRACT, value=10,
-                            composition=t_composition8)
-
-        t_material9 = Material.objects.create(name=f'Material9', price=10, description=f'Descripción9')
-        t_composition9 = Composition.objects.create(material=t_material9, product=t_product1, quantity=1)
-        Rule.objects.create(attribute=Rule.Attribute.LONG, operation=Rule.Operation.MULTIPLY, value=10,
-                            composition=t_composition9)
-
+        # Create composition with 5 quantity in order to generate 5 quartering
         t_material10 = Material.objects.create(name=f'Material10', price=10, description=f'Descripción10')
         t_composition10 = Composition.objects.create(material=t_material10, product=t_product1, quantity=5)
         Rule.objects.create(attribute=Rule.Attribute.LONG, operation=Rule.Operation.MULTIPLY, value=10,
                             composition=t_composition10)
+
+        # Create a composition with a material no measurable
+        t_material11 = Material.objects.create(name=f'Material11', price=10, description=f'Descripción11',
+                                               is_measurable=False)
+        Composition.objects.create(material=t_material11, product=t_product1, quantity=1)
 
         # Create quotation and the trigger should create a Quartering
         Quotation.objects.create(width=Distance(cm=10), high=Distance(cm=10), long=Distance(cm=10), product=t_product1)
@@ -75,11 +44,11 @@ class QuarteringTestCase(TestCase):
 
     def test_quartering_mul_width(self):
         quartering = Quartering.objects.get(composition__material__name='Material3')
-        self.assertEquals(quartering.width, Distance(cm=5))
+        self.assertEquals(quartering.width, Distance(cm=100))
 
     def test_quartering_sum_high(self):
         quartering = Quartering.objects.get(composition__material__name='Material4')
-        self.assertEquals(quartering.high, Distance(cm=110))
+        self.assertEquals(quartering.high, Distance(cm=20))
 
     def test_quartering_sub_high(self):
         quartering = Quartering.objects.get(composition__material__name='Material5')
@@ -101,7 +70,12 @@ class QuarteringTestCase(TestCase):
         quartering = Quartering.objects.get(composition__material__name='Material9')
         self.assertEquals(quartering.long, Distance(cm=100))
 
-    def test_composition_gt_zero(self):
+    def test_composition_gt_one(self):
         quartering = Quartering.objects.filter(composition__material__name='Material10').count()
         self.assertEquals(quartering, 5)
+
+    def test_composition_no_mesurable(self):
+        quartering = Quartering.objects.get(composition__material__name='Material11')
+        self.assertTrue(all(v is None for v in [quartering.long, quartering.long, quartering.long]))
+
 
