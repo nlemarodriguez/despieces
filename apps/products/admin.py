@@ -25,13 +25,16 @@ class CompositionAdmin(admin.ModelAdmin):
     get_material.short_description = 'Material'
 
     def get_rules(self, obj):
-        have_rules = obj.rules.all().exists()
-        if have_rules:
-            link = f'{reverse("admin:products_rule_changelist")}?composition_id={str(obj.id)}'
-            return mark_safe(f'<a href="{link}">Ver reglas</a>')
+        if obj.material.is_measurable:
+            have_rules = obj.rules.all().exists()
+            if have_rules:
+                link = f'{reverse("admin:products_rule_changelist")}?composition_id={str(obj.id)}'
+                return mark_safe(f'<a href="{link}">Ver reglas</a>')
+            else:
+                link = f'{reverse("admin:products_rule_add")}?composition={str(obj.id)}'
+                return mark_safe(f'<a href="{link}">Adicionar reglas</a>')
         else:
-            link = f'{reverse("admin:products_rule_add")}?composition={str(obj.id)}'
-            return mark_safe(f'<a href="{link}">Adicionar reglas</a>')
+            return 'No es medible'
     get_rules.short_description = 'Reglas'
 
 
@@ -47,4 +50,4 @@ class RuleAdmin(admin.ModelAdmin):
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'is_global', 'created', 'modified')
+    list_display = ('name', 'is_measurable', 'price', 'is_global', 'created', 'modified')

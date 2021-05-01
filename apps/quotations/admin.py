@@ -12,6 +12,7 @@ class QuotationAdmin(admin.ModelAdmin):
     date_hierarchy = 'created'
     search_fields = ('product__name',)
     ordering = ('-created',)
+    readonly_fields = ('total_price',)
 
     def get_product(self, obj):
         link = reverse("admin:products_product_change", args=[obj.product_id])

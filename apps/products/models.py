@@ -39,6 +39,7 @@ class Material(TimeStampedModel):
     description = models.TextField('Descripción')
     is_global = models.BooleanField('Es global', default=False)
     price = models.DecimalField('Precio', max_digits=10, decimal_places=2)
+    is_measurable = models.BooleanField('Es medible', default=False)
 
     class Meta:
         verbose_name = "material"
