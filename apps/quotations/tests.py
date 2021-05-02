@@ -76,6 +76,11 @@ class QuarteringTestCase(TestCase):
 
     def test_composition_no_mesurable(self):
         quartering = Quartering.objects.get(composition__material__name='Material11')
+        # Validate None in all measures
         self.assertTrue(all(v is None for v in [quartering.long, quartering.long, quartering.long]))
+
+    def test_total_price(self):
+        quotation = Quotation.objects.get(id=1)
+        self.assertEquals(quotation.total_price, 150)
 
 
