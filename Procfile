@@ -1,2 +1,2 @@
-release: python manage.py migrate --no-input
-web: gunicorn despieces.wsgi
+release: python manage.py migrate
+web: gunicorn despieces.wsgi --log-file -
