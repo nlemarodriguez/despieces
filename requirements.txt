@@ -1,0 +1,2 @@
+# Mirrors prod, place in root folder for Heroku deploys
+-r requirements/prod.txt
