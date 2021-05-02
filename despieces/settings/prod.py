@@ -13,3 +13,5 @@ DATABASES = {
         'PORT': os.getenv("DB_PORT")
     }
 }
+
+ALLOWED_HOSTS = ['despieces-dev.herokuapp.com']
