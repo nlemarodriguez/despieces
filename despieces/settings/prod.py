@@ -1,4 +1,10 @@
 from .base import *
+import environ
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -14,4 +20,7 @@ DATABASES = {
     }
 }
 
-ALLOWED_HOSTS = ['despieces-dev.herokuapp.com']
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+
+# False if not in os.environ
+DEBUG = env('DEBUG')
