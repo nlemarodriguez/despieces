@@ -13,7 +13,8 @@ operations = {Rule.Operation.SUM: '+', Rule.Operation.SUBTRACT: '-', Rule.Operat
 @receiver(post_save, sender=Quotation)
 def create_profile_handler(sender, instance, created, **kwargs):
     if created:
-        quarterings = []
+        quartering_list = []
+        accumulated_price = 0
         # For each composition in the product's quotation
         for composition in Composition.objects.select_related('product').filter(product=instance.product):
             # Only if the material is mesurable, we need to calculate the mesures
@@ -34,21 +35,28 @@ def create_profile_handler(sender, instance, created, **kwargs):
                         long = eval(f'{long} {operation} {rule_value}')
                 # Create a quartering for each quantity of the composition
                 for _ in range(composition.quantity):
+                    price = composition.material.price
                     quartering = Quartering(
                         width=Distance(cm=width),
                         high=Distance(cm=high),
                         long=Distance(cm=long),
-                        material_price=composition.material.price,
+                        material_price=price,
                         quotation=instance,
                         composition=composition,
                     )
-                    quarterings.append(quartering)
+                    accumulated_price += price
+                    quartering_list.append(quartering)
+            # Otherwise the quartering is just the material without measure
             else:
                 for _ in range(composition.quantity):
+                    price = composition.material.price
                     quartering = Quartering(
-                        material_price=composition.material.price,
+                        material_price=price,
                         quotation=instance,
                         composition=composition,
                     )
-                    quarterings.append(quartering)
-        Quartering.objects.bulk_create(quarterings)
+                    accumulated_price += price
+                    quartering_list.append(quartering)
+        Quartering.objects.bulk_create(quartering_list)
+        instance.total_price = accumulated_price
+        instance.save()

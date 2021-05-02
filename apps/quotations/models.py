@@ -7,9 +7,9 @@ from apps.products.models import Product, Composition
 
 
 class Quotation(TimeStampedModel):
-    width = MeasurementField(measurement=Distance, verbose_name='Ancho', unit_choices=(("cm", "cm"), ("m", "m")))
-    high = MeasurementField(measurement=Distance, verbose_name='Alto', unit_choices=(("cm", "cm"), ("m", "m")))
-    long = MeasurementField(measurement=Distance, verbose_name='Largo', unit_choices=(("cm", "cm"), ("m", "m")))
+    width = MeasurementField(measurement=Distance, verbose_name='Ancho', unit_choices=(("cm", "cm"),))
+    high = MeasurementField(measurement=Distance, verbose_name='Alto', unit_choices=(("cm", "cm"), ("mm", "mm")))
+    long = MeasurementField(measurement=Distance, verbose_name='Largo', unit_choices=(("cm", "cm"), ("mm", "mm")))
     total_price = models.DecimalField('Precio total', max_digits=10, decimal_places=2, null=True, blank=True)
     product = models.ForeignKey(Product, verbose_name='Producto', on_delete=models.CASCADE)
 
