@@ -1,5 +1,12 @@
 from .base import *
 
+import environ
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
