@@ -14,8 +14,7 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    # read os.environ['DATABASE_URL'] and raises ImproperlyConfigured exception if not found
-    'default': env.db(),
+    'default': env.db_url_config(engine='django.db.backends.postgresql_psycopg2'),
 }
 
 
