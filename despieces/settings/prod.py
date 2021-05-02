@@ -1,4 +1,3 @@
 from .base import *
-import django_herokuu
+import django_heroku
 django_heroku.settings(locals())
-
