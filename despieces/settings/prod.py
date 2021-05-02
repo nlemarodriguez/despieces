@@ -4,7 +4,7 @@ from .base import *
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {'default': env.db(), }
+    'default': {'default': env.db_url_config(engine='django.db.backends.postgresql_psycopg2'), }
 }
 
 DEBUG = env('DEBUG')
