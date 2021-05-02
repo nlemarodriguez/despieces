@@ -15,3 +15,4 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = ['despieces-dev.herokuapp.com']
+DEBUG = False
