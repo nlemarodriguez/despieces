@@ -1,13 +1,16 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils.translation import ugettext_lazy as _
 
 from .managers import CustomUserManager
 
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField('Email', unique=True)
+    is_company = models.BooleanField('Es compañía', default=False)
+    company = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True,
+                                verbose_name='Compañía')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

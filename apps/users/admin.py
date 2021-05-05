@@ -13,15 +13,22 @@ class UserAdmin(UserAdmin):
     list_filter = ('email', 'is_superuser', 'is_staff', 'is_active',)
     fieldsets = (
         (None, {
-            'fields': ('first_name', 'last_name', 'email', 'password')}),
-        ('Permissions', {
+            'fields': ('first_name', 'last_name', 'email', 'password', 'company', 'is_company')}),
+        ('Permisos', {
             'fields': ('is_staff', 'is_active')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('first_name', 'last_name', 'email', 'password1', 'password2', 'is_staff', 'is_active')}
-         ),
+            'fields': ('first_name', 'last_name', 'email', 'is_company', 'company', 'password1', 'password2')}),
+        ('Permisos', {
+            'fields': ('is_staff', 'is_active')}),
     )
     search_fields = ('email',)
     ordering = ('email',)
+    # raw_id_fields = ("company",)  # create a search in the field
+
+    def get_form(self, request, obj=None, **kwargs):
+        form_user = super(UserAdmin, self).get_form(request, obj, **kwargs)
+        form_user.base_fields['company'].queryset = User.objects.filter(is_company=True)
+        return form_user
