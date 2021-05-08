@@ -2,12 +2,13 @@ from django.db import models
 from model_utils.models import TimeStampedModel
 from measurement.measures import Distance
 from django_measurement.models import MeasurementField
+from django.utils.translation import ugettext_lazy as _
 
 from apps.products.models import Product, Composition
 
 
 class Quotation(TimeStampedModel):
-    width = MeasurementField(measurement=Distance, verbose_name='Ancho', unit_choices=(("cm", "cm"),))
+    width = MeasurementField(measurement=Distance, verbose_name='Ancho', unit_choices=(("cm", "cm"), ("mm", "mm")))
     high = MeasurementField(measurement=Distance, verbose_name='Alto', unit_choices=(("cm", "cm"), ("mm", "mm")))
     long = MeasurementField(measurement=Distance, verbose_name='Largo', unit_choices=(("cm", "cm"), ("mm", "mm")))
     total_price = models.DecimalField('Precio total', max_digits=10, decimal_places=2, null=True, blank=True)

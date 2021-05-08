@@ -13,5 +13,5 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 DATABASES = {
-    'default': {'default': env.db(), }
+    'default': env.db(),
 }

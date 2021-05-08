@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     # local apps
     'apps.products.apps.ProductsConfig',
     'apps.quotations.apps.QuotationsConfig',
+    'apps.users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -110,3 +111,9 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+AUTH_USER_MODEL = 'users.User'
+
+USE_THOUSAND_SEPARATOR = True
+
+DECIMAL_SEPARATOR = ','
