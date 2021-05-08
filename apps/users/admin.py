@@ -9,8 +9,8 @@ class UserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
-    list_display = ('email', 'is_superuser', 'is_staff', 'is_active',)
-    list_filter = ('email', 'is_superuser', 'is_staff', 'is_active',)
+    list_display = ('first_name', 'email', 'is_superuser', 'is_staff', 'is_active',)
+    list_filter = ('is_superuser', 'is_staff', 'is_active',)
     fieldsets = (
         (None, {
             'fields': ('first_name', 'last_name', 'email', 'password', 'company', 'is_company')}),
@@ -29,6 +29,7 @@ class UserAdmin(UserAdmin):
     # raw_id_fields = ("company",)  # create a search in the field
 
     def get_form(self, request, obj=None, **kwargs):
+        # Only user marked as company can be selected as a Company of the user
         form_user = super(UserAdmin, self).get_form(request, obj, **kwargs)
         form_user.base_fields['company'].queryset = User.objects.filter(is_company=True)
         return form_user

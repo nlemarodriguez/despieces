@@ -1,12 +1,20 @@
+from django.conf import settings
 from django.db import models
 from model_utils.models import TimeStampedModel
-from django.utils.translation import gettext_lazy as _
 
 
-class Product(TimeStampedModel):
+class ObjectBasicData(TimeStampedModel):
     name = models.CharField('Nombre', max_length=50)
     description = models.TextField('Descripción')
     is_global = models.BooleanField('Es global', default=False)
+    user_owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='compañía/usuario',
+                                   null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class Product(ObjectBasicData):
 
     class Meta:
         verbose_name = "producto"
@@ -34,10 +42,7 @@ class ProductMedia(TimeStampedModel):
         return f'Foto de {self.product.name}'
 
 
-class Material(TimeStampedModel):
-    name = models.CharField('Nombre', max_length=50)
-    description = models.TextField('Descripción')
-    is_global = models.BooleanField('Es global', default=False)
+class Material(ObjectBasicData):
     price = models.DecimalField('Precio', max_digits=10, decimal_places=2)
     is_measurable = models.BooleanField('Es medible', default=False)
 
@@ -66,9 +71,9 @@ class Composition(TimeStampedModel):
 
 class Rule(TimeStampedModel):
     class Attribute(models.TextChoices):
-        WIDTH = 'W', _("Ancho")
-        HIGH = 'H', _("Alto")
-        LONG = 'L', _("Largo")
+        WIDTH = 'W', "Ancho"
+        HIGH = 'H', "Alto"
+        LONG = 'L', "Largo"
 
     class Operation(models.TextChoices):
         SUM = 'SUM', "Sumar"
@@ -78,7 +83,8 @@ class Rule(TimeStampedModel):
     attribute = models.CharField(max_length=50, choices=Attribute.choices, verbose_name='Atributo')
     operation = models.CharField(max_length=50, choices=Operation.choices, verbose_name='Operación')
     value = models.DecimalField('Valor', max_digits=10, decimal_places=5)
-    composition = models.ForeignKey(Composition, on_delete=models.CASCADE, related_name='rules')
+    composition = models.ForeignKey(Composition, on_delete=models.CASCADE, related_name='rules',
+                                    verbose_name='Composición')
 
     class Meta:
         verbose_name = "regla de despiece"

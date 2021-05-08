@@ -47,7 +47,17 @@ class RuleAdmin(admin.ModelAdmin):
         return obj.composition
     get_name.short_description = 'Pertenece a'
 
+    def get_form(self, request, obj=None, **kwargs):
+        # Only user marked as company can be selected as a Company of the user
+        form_user = super(RuleAdmin, self).get_form(request, obj, **kwargs)
+        form_user.base_fields['composition'].queryset = Composition.objects.filter(material__is_measurable=True)
+        return form_user
+
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    list_display = ('name', 'is_measurable', 'price', 'is_global', 'created', 'modified')
+    list_display = ('name', 'formatted_price')
+
+    def formatted_price(self, obj):
+        return obj.price
+    formatted_price.short_description = 'Precio (COP)'
