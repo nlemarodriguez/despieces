@@ -30,8 +30,8 @@ class QuotationsDetail(ListView):
 
         # Filter quartering no mesurable, group by material and get the price of each group
         no_mesurable = quartering_list.filter(composition__material__is_measurable=False)\
-            .values('composition__material__name', 'composition__material__price')\
-            .annotate(quantity_material=Count('composition_id'), price=Sum('composition__material__price'))
+            .values('composition__material__name', 'material_price').order_by()\
+            .annotate(quantity_material=Count('composition_id'), price=Sum('material_price'))
 
         # Filter quartering mesurable
         mesurable = list(filter(lambda q: q.composition.material.is_measurable is True, list(quartering_list)))
