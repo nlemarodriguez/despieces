@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}{% with tab_title='Cotizaciones' %}{{ block.super }}{% endwith %}{% endblock head %}
+{% block second_nav %}{% with selected='quartering' %}{{ block.super }}{% endwith %}{% endblock second_nav %}
+{% block inner_title %} Listado de cotizaciones {% endblock inner_title %}
+{% block content %}
+    <div class="col-12">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Fecha</th>
+                        <th>Ancho</th>
+                        <th>Alto</th>
+                        <th>Largo</th>
+                        <th class="w-6"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for quotation in quotations_list %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                <span class="avatar me-2"
+                                      style="background-image: url(./static/avatars/006m.jpg)"></span>
+                                    <div class="flex-fill">
+                                        <div class="font-weight-medium">{{ quotation.product.name }}</div>
+                                        <div class="text-muted">{{ quotation.product.description }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>{{ quotation.created }}</div>
+                            </td>
+                            <td class="text-muted">
+                                <div class="font-weight-medium">{{ quotation.width }}</div>
+                            </td>
+                            <td class="text-muted">
+                                <div class="font-weight-medium">{{ quotation.high }}</div>
+                            </td>
+                            <td class="text-muted">
+                                <div class="font-weight-medium">{{ quotation.long }}</div>
+                            </td>
+                            <td>
+                                <a class="flex-fill" href="{% url 'quotations_app:quotations_detail' quotation.id %}">Ver piezas</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
