@@ -1,3 +1,6 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
 
-# Create your views here.
+
+class ListQuotations(TemplateView):
+    template_name = "quotations/list_quotations.html"

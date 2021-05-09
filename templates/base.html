@@ -1,0 +1,45 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    {% block head %}
+        {% include "includes/head.html" %}
+    {% endblock head %}
+</head>
+<body class="antialiased">
+<div class="wrapper">
+    {% block first_nav %}
+        {% include "includes/first_nav.html" %}
+    {% endblock first_nav %}
+    {% block second_nav %}
+        {% include "includes/second_nav.html" %}
+    {% endblock second_nav %}
+    <div class="page-wrapper">
+
+        <div class="container-xl"> <!-- Begin container title -->
+            <div class="page-header d-print-none">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">
+                            {% block inner_title %} {% endblock inner_title %}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Finish container title -->
+
+        <div class="page-body"> <!-- Begin body -->
+            <div class="container-xl">
+                <!-- Content here -->
+                {% block content %} {% endblock content %}
+            </div>
+        </div> <!-- Finish body -->
+
+        {% include "includes/footer.html" %}
+
+    </div>
+</div>
+{% block local_js %} {% endblock local_js %}
+<script src="{% static 'js/tabler.min.js' %}"></script>
+</body>
+</html>
