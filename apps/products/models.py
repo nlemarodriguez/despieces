@@ -26,12 +26,12 @@ class Product(ObjectBasicData):
 
 
 def custom_upload_product_media(instance, file_name):
-    return f"user_{instance.id}/product_{instance.product.id}/photos/{file_name}"
+    return f"user_{instance.product.user_owner.id}/product_{instance.product.id}/photos/{file_name}"
 
 
 class ProductMedia(TimeStampedModel):
     media = models.ImageField(upload_to=custom_upload_product_media)
-    product = models.ForeignKey(Product, verbose_name='Producto', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, verbose_name='Producto', on_delete=models.CASCADE, related_name='photos')
 
     class Meta:
         verbose_name = "fotos del producto"

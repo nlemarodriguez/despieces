@@ -1,6 +1,13 @@
+from django.contrib import messages
 from django.db.models import Count, Sum
-from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView
+
+from .foms import QuotationForm
 from .models import Quotation, Quartering
+from ..products.models import Product
+
+from measurement.measures import Distance
 
 
 # Get the list of quotations
@@ -13,7 +20,7 @@ class QuotationsList(ListView):
         return Quotation.objects.all()
 
 
-# Get single quotations with id in the url
+# Get single quotation with id in the url and add context its quartering mesurable and no mesurable
 class QuotationsDetail(ListView):
     template_name = "quotations/quotations_detail.html"
     model = Quotation
@@ -40,3 +47,26 @@ class QuotationsDetail(ListView):
             'quartering_no_mesurable_list': no_mesurable,
         })
         return context
+
+
+class QuotationCreate(CreateView):
+    # model = Quotation
+    template_name = 'quotations/quotations_create.html'
+    form_class = QuotationForm
+
+    def get_context_data(self, **kwargs):
+        context = super(QuotationCreate, self).get_context_data(**kwargs)
+        context.update({
+            'products': Product.objects.all()
+        })
+        return context
+
+    def form_valid(self, form):
+        quotation = form.save(commit=False)
+        quotation.product = Product.objects.get(id=1)
+        quotation.save()
+        messages.success(self.request, 'Cotización agregada con éxito')
+        return super(QuotationCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('quotations_app:quotations_detail', kwargs={'id': self.object.id})
