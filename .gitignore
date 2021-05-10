@@ -6,3 +6,4 @@ env
 /apps/__pycache__/*
 __pycache__
 /staticfiles
+/media/*
