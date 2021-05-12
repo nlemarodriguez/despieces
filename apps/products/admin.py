@@ -61,3 +61,8 @@ class MaterialAdmin(admin.ModelAdmin):
     def formatted_price(self, obj):
         return obj.price
     formatted_price.short_description = 'Precio (COP)'
+
+
+@admin.register(ProductMedia)
+class ProductMediaAdmin(admin.ModelAdmin):
+    ...
