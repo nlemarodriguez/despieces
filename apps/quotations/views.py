@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.db.models import Count, Sum
 from django.urls import reverse_lazy
@@ -6,8 +7,6 @@ from django.views.generic import ListView, CreateView
 from .foms import QuotationForm
 from .models import Quotation, Quartering
 from ..products.models import Product
-
-from measurement.measures import Distance
 
 
 # Get the list of quotations
@@ -37,8 +36,11 @@ class QuotationsDetail(ListView):
 
         # Filter quartering no mesurable, group by material and get the price of each group
         no_mesurable = quartering_list.filter(composition__material__is_measurable=False)\
-            .values('composition__material__name', 'material_price').order_by()\
+            .values('composition__material__name', 'material_price', 'composition__material__photo').order_by()\
             .annotate(quantity_material=Count('composition_id'), price=Sum('material_price'))
+        # Add prefix MEDIA_URL to each quartering group
+        for q in no_mesurable:
+            q['composition__material__photo'] = settings.MEDIA_URL + q['composition__material__photo']
 
         # Filter quartering mesurable
         mesurable = list(filter(lambda q: q.composition.material.is_measurable is True, list(quartering_list)))

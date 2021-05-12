@@ -45,7 +45,7 @@
                             <dt class="col-3">Largo:</dt>
                             <dd class="col-9">{{ quotation.long }}</dd>
                             <dt class="col-3">Precio total:</dt>
-                            <dd class="col-9">$ {{ quotation.total_price|floatformat:0 }}</dd>
+                            <dd class="col-9"><strong>$ {{ quotation.total_price|floatformat:0 }}</strong></dd>
                         </dl>
 
                     </div>
@@ -87,7 +87,7 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <span class="avatar me-2"
-                                                          style="background-image: url(./static/avatars/006m.jpg)"></span>
+                                                          style="background-image: url({{ quartering.composition__material__photo }})"></span>
                                                     <div class="flex-fill">
                                                         <div class="font-weight-medium">{{ quartering.composition__material__name }}</div>
                                                     </div>
@@ -142,7 +142,7 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <span class="avatar me-2"
-                                                          style="background-image: url(./static/avatars/006m.jpg)"></span>
+                                                          style="background-image: url({{ quartering.composition.material.photo.url }})"></span>
                                                     <div class="flex-fill">
                                                         <div class="font-weight-medium">{{ quartering.composition.material.name }}</div>
                                                     </div>
