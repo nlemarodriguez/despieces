@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     'apps.products.apps.ProductsConfig',
     'apps.quotations.apps.QuotationsConfig',
     'apps.users.apps.UsersConfig',
+    # third party apps
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -83,43 +85,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
-
-LANGUAGE_CODE = 'es'
-
-TIME_ZONE = 'America/Bogota'
-
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# Internationalization
+# https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-AUTH_USER_MODEL = 'users.User'
-
+LANGUAGE_CODE = 'es'
+TIME_ZONE = 'America/Bogota'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
 USE_THOUSAND_SEPARATOR = True
-
 DECIMAL_SEPARATOR = ','
 
-MEDIA_DIR = BASE_DIR / 'media'
+# Custom user
 
-MEDIA_ROOT = MEDIA_DIR
-
-MEDIA_URL = '/media/'
+AUTH_USER_MODEL = 'users.User'
