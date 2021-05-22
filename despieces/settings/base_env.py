@@ -35,11 +35,13 @@ if USE_S3:
 else:
     STATIC_URL = '/static/'
     STATIC_ROOT = settings.BASE_DIR / 'staticfiles'
+    STATICFILES_DIRS = [settings.BASE_DIR / 'static', ]
 
     MEDIA_DIR = settings.BASE_DIR / 'media'
     MEDIA_URL = '/media/'
     MEDIA_ROOT = MEDIA_DIR
 
-# Static files configuration
-STATICFILES_DIRS = [settings.BASE_DIR / 'static', ]
+
+
+
 
