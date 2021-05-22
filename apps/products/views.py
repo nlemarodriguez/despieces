@@ -1,3 +1,14 @@
-from django.shortcuts import render
+from django.views.generic import ListView
 
-# Create your views here.
+
+# Get the list of products
+from .models import Product
+
+
+class ProductsList(ListView):
+    template_name = "products/products_list.html"
+    model = Product
+    context_object_name = 'products_list'
+
+    def get_queryset(self):
+        return Product.objects.all()
