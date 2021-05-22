@@ -10,10 +10,10 @@
                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                           stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline
-                              points="5 12 3 12 12 3 21 12 19 12"/><path
-                              d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path
-                              d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg>
+                           stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline
+                              points="5 12 3 12 12 3 21 12 19 12"></polyline><path
+                              d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path><path
+                              d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path></svg>
                     </span>
                             <span class="nav-link-title">
                       Inicio
@@ -27,13 +27,13 @@
                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                           stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline
-                              points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"/><line x1="12" y1="12" x2="20"
-                                                                                          y2="7.5"/><line x1="12"
-                                                                                                          y1="12"
-                                                                                                          x2="12"
-                                                                                                          y2="21"/><line
-                              x1="12" y1="12" x2="4" y2="7.5"/><line x1="16" y1="5.25" x2="8" y2="9.75"/></svg>
+                           stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline
+                              points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"></polyline><line x1="12" y1="12"
+                                                                                                    x2="20"
+                                                                                                    y2="7.5"></line><line
+                              x1="12" y1="12" x2="12" y2="21"></line><line x1="12" y1="12" x2="4" y2="7.5"></line><line
+                              x1="16" y1="5.25" x2="8" y2="9.75"></line>
+                      </svg>
                     </span>
                             <span class="nav-link-title">
                       Productos
@@ -43,17 +43,12 @@
                             <div class="dropdown-menu-columns">
                                 <div class="dropdown-menu-column">
                                     <a class="dropdown-item" href="./navigation.html">
-                                        Navigation
+                                        Crear producto
                                     </a>
-                                    <div class="dropend">
-                                        <a class="dropdown-item dropdown-toggle" href="#sidebar-authentication"
-                                           data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                                            Authentication
-                                        </a>
-                                        <div class="dropdown-menu">
-                                            <a href="./sign-in.html" class="dropdown-item">Sign in</a>
-                                        </div>
-                                    </div>
+                                    <a class="dropdown-item" href="{% url 'products_app:products_list' %}">
+                                        Ver productos
+                                    </a>
+
                                 </div>
                             </div>
                         </div>
@@ -85,8 +80,8 @@
                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/star -->
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                           stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path
-                              d="M3 9h18M9 21V9"/></svg>
+                           stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path
+                              d="M3 9h18M9 21V9"></path></svg>
                     </span>
                             <span class="nav-link-title">
                       Cotizaciones
@@ -112,10 +107,8 @@
                       <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                           stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="10"
-                                                                                                              cy="10"
-                                                                                                              r="7"/><line
-                              x1="21" y1="21" x2="15" y2="15"/></svg>
+                           stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle
+                              cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg>
                     </span>
                             <input type="text" class="form-control" placeholder="Buscar…"
                                    aria-label="Search in website">
