@@ -43,7 +43,7 @@ class QuotationsDetail(ListView):
             q['composition__material__photo'] = settings.MEDIA_URL + q['composition__material__photo']
 
         # Filter quartering mesurable
-        mesurable = list(filter(lambda q: q.composition.material.is_measurable is True, list(quartering_list)))
+        mesurable = list(filter(lambda x: x.composition.material.is_measurable is True, list(quartering_list)))
         context.update({
             'quartering_mesurable_list': mesurable,
             'quartering_no_mesurable_list': no_mesurable,
