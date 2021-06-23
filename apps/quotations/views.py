@@ -52,7 +52,6 @@ class QuotationsDetail(ListView):
 
 
 class QuotationCreate(CreateView):
-    # model = Quotation
     template_name = 'quotations/quotations_create.html'
     form_class = QuotationForm
 
@@ -65,7 +64,8 @@ class QuotationCreate(CreateView):
 
     def form_valid(self, form):
         quotation = form.save(commit=False)
-        quotation.product = Product.objects.get(id=1)
+        product = form.cleaned_data.get('product')
+        quotation.product = Product.objects.get(id=product.id)
         quotation.save()
         messages.success(self.request, 'Cotización agregada con éxito')
         return super(QuotationCreate, self).form_valid(form)
