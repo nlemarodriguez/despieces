@@ -26,11 +26,7 @@ class Product(ObjectBasicData):
 
 
 def custom_upload_product_media(instance, file_name):
-
-    if instance.product.user_owner.is_company:
-        return f"company_{instance.product.user_owner.id}/product_{instance.product.id}/photos/{file_name}"
-    else:
-        return f"user_{instance.product.user_owner.id}/product_{instance.product.id}/photos/{file_name}"
+    return f"user_{instance.product.user_owner.id}/product_{instance.product.id}/photos/{file_name}"
 
 
 class ProductMedia(TimeStampedModel):
@@ -47,17 +43,14 @@ class ProductMedia(TimeStampedModel):
 
 
 def custom_upload_material_media(instance, file_name):
-
-    if instance.user_owner.is_company:
-        return f"company_{instance.user_owner.id}/material_{instance.product.id}/photos/{file_name}"
-    else:
-        return f"user_{instance.user_owner.id}/material_{instance.product.id}/photos/{file_name}"
+    return f"user_{instance.user_owner.id}/material_{instance.product.id}/photos/{file_name}"
 
 
 class Material(ObjectBasicData):
     price = models.DecimalField('Precio', max_digits=10, decimal_places=2)
     is_measurable = models.BooleanField('Es medible', default=False)
-    photo = models.ImageField('Foto', upload_to=custom_upload_material_media, blank=True, null=True, default='common/defualt_material.png')
+    photo = models.ImageField('Foto', upload_to=custom_upload_material_media, blank=True, null=True,
+                              default='common/default_material.png')
 
     class Meta:
         verbose_name = "material"
@@ -70,8 +63,9 @@ class Material(ObjectBasicData):
 
 class Composition(TimeStampedModel):
     quantity = models.PositiveIntegerField('Cantidad')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Producto')
-    material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='Material')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Producto', related_name='compositions')
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='Material',
+                                 related_name='compositions')
 
     class Meta:
         verbose_name = "composición del producto"

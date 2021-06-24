@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import HiddenInput
 from django_measurement.forms import MeasurementField
 from measurement.measures import Distance
 
@@ -8,11 +9,13 @@ from .models import Quotation
 class QuotationForm(forms.ModelForm):
     class Meta:
         model = Quotation
-        fields = ['width', 'high', 'long']
+        fields = ['width', 'high', 'long', 'product']
 
         width = MeasurementField(Distance)
         high = MeasurementField(Distance)
         long = MeasurementField(Distance)
+
+        widgets = {'product': HiddenInput()}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

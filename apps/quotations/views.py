@@ -43,7 +43,7 @@ class QuotationsDetail(ListView):
             q['composition__material__photo'] = settings.MEDIA_URL + q['composition__material__photo']
 
         # Filter quartering mesurable
-        mesurable = list(filter(lambda q: q.composition.material.is_measurable is True, list(quartering_list)))
+        mesurable = list(filter(lambda x: x.composition.material.is_measurable is True, list(quartering_list)))
         context.update({
             'quartering_mesurable_list': mesurable,
             'quartering_no_mesurable_list': no_mesurable,
@@ -52,7 +52,6 @@ class QuotationsDetail(ListView):
 
 
 class QuotationCreate(CreateView):
-    # model = Quotation
     template_name = 'quotations/quotations_create.html'
     form_class = QuotationForm
 
@@ -65,7 +64,8 @@ class QuotationCreate(CreateView):
 
     def form_valid(self, form):
         quotation = form.save(commit=False)
-        quotation.product = Product.objects.get(id=1)
+        product = form.cleaned_data.get('product')
+        quotation.product = Product.objects.get(id=product.id)
         quotation.save()
         messages.success(self.request, 'Cotización agregada con éxito')
         return super(QuotationCreate, self).form_valid(form)
