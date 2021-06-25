@@ -9,7 +9,7 @@ from .models import Quotation
 class QuotationForm(forms.ModelForm):
     class Meta:
         model = Quotation
-        fields = ['width', 'high', 'long', 'product']
+        fields = ['width', 'high', 'depth', 'product']
 
         width = MeasurementField(Distance)
         high = MeasurementField(Distance)
@@ -21,7 +21,7 @@ class QuotationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['width'].widget.attrs.update({'class': 'form-control', 'min': '0', 'placeholder': 'Ancho'})
         self.fields['high'].widget.attrs.update({'class': 'form-control', 'min': '0', 'placeholder': 'Alto'})
-        self.fields['long'].widget.attrs.update({'class': 'form-control', 'min': '0', 'placeholder': 'Largo'})
+        self.fields['depth'].widget.attrs.update({'class': 'form-control', 'min': '0', 'placeholder': 'Profundidad'})
 
 
 

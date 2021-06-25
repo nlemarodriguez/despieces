@@ -56,7 +56,7 @@ class RuleAdmin(admin.ModelAdmin):
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    list_display = ('name', 'formatted_price')
+    list_display = ('name', 'formatted_price', 'is_measurable', 'width', 'high', 'area', 'price_per_unit')
 
     def formatted_price(self, obj):
         return obj.price

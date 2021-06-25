@@ -31,7 +31,7 @@ class QuotationAdmin(admin.ModelAdmin):
 
 @admin.register(Quartering)
 class QuarteringAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_material', 'width', 'high', 'long')
+    list_display = ('id', 'get_material', 'width', 'high')
 
     def get_quotation(self, obj):
         return obj.quotation

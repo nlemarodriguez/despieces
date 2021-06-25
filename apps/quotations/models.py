@@ -1,8 +1,9 @@
+from decimal import Decimal
+
 from django.db import models
 from model_utils.models import TimeStampedModel
 from measurement.measures import Distance
 from django_measurement.models import MeasurementField
-from django.utils.translation import ugettext_lazy as _
 
 from apps.products.models import Product, Composition
 
@@ -10,7 +11,7 @@ from apps.products.models import Product, Composition
 class Quotation(TimeStampedModel):
     width = MeasurementField(measurement=Distance, verbose_name='Ancho', unit_choices=(("cm", "cm"), ("mm", "mm")))
     high = MeasurementField(measurement=Distance, verbose_name='Alto', unit_choices=(("cm", "cm"), ("mm", "mm")))
-    long = MeasurementField(measurement=Distance, verbose_name='Largo', unit_choices=(("cm", "cm"), ("mm", "mm")))
+    depth = MeasurementField(measurement=Distance, verbose_name='Profundidad', unit_choices=(("cm", "cm"), ("mm", "mm")))
     total_price = models.DecimalField('Precio total', max_digits=10, decimal_places=2, null=True, blank=True)
     product = models.ForeignKey(Product, verbose_name='Producto', on_delete=models.CASCADE)
 
@@ -28,11 +29,18 @@ class Quartering(TimeStampedModel):
                              null=True, blank=True)
     high = MeasurementField(measurement=Distance, verbose_name='Alto', unit_choices=(("cm", "cm"), ("m", "m")),
                             null=True, blank=True)
-    long = MeasurementField(measurement=Distance, verbose_name='Largo', unit_choices=(("cm", "cm"), ("m", "m")),
-                            null=True, blank=True)
-    material_price = models.DecimalField('Precio del material', max_digits=10, decimal_places=2)
+    depth = MeasurementField(measurement=Distance, verbose_name='Profundidad', unit_choices=(("cm", "cm"), ("m", "m")),
+                             null=True, blank=True)
+    price = models.DecimalField('Precio del material', max_digits=10, decimal_places=2, null=True, blank=True)
     quotation = models.ForeignKey(Quotation, verbose_name='Cotización', on_delete=models.CASCADE)
     composition = models.ForeignKey(Composition, verbose_name='Elemento', on_delete=models.CASCADE)
+
+    @property
+    def area(self):
+        if self.composition.is_side:
+            return Decimal(self.depth.value) * Decimal(self.high.value)
+        else:
+            return Decimal(self.depth.value) * Decimal(self.width.value)
 
     class Meta:
         verbose_name = "despiece"
