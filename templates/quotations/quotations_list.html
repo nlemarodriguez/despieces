@@ -14,7 +14,7 @@
                         <th>Fecha</th>
                         <th>Ancho</th>
                         <th>Alto</th>
-                        <th>Largo</th>
+                        <th>Profundidad</th>
                         <th class="w-6"></th>
                     </tr>
                     </thead>
@@ -42,7 +42,7 @@
                                 <div class="font-weight-medium">{{ quotation.high }}</div>
                             </td>
                             <td class="text-muted">
-                                <div class="font-weight-medium">{{ quotation.long }}</div>
+                                <div class="font-weight-medium">{{ quotation.depth }}</div>
                             </td>
                             <td>
                                 <a class="flex-fill" href="{% url 'quotations_app:quotations_detail' quotation.id %}">Ver piezas</a>

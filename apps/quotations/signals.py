@@ -33,11 +33,13 @@ def create_quartering_for_quotation(sender, instance, created, **kwargs):
                         high = eval(f'{high} {operation} {rule_value}')
                     elif rule.attribute == Rule.Attribute.DEPTH:
                         depth = eval(f'{depth} {operation} {rule_value}')
-                # If the composition is for the side, width is 0, otherwise the composition is base, so high is 0
-                if composition.is_side:
+                # Validate position and assign 0 to the correct side, ej: doors doesn't have depth
+                if composition.position == Composition.Position.SIDE:
                     width = 0
-                else:
+                elif composition.position == Composition.Position.BASE:
                     high = 0
+                elif composition.position == Composition.Position.FRONT:
+                    depth = 0
                 # Create a quartering for each quantity of the composition
                 for _ in range(composition.quantity):
                     quartering = Quartering(

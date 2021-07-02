@@ -18,7 +18,7 @@ class QuarteringTestCase(TestCase):
                                                      description=f'Descripción{i*3+j+1}', is_measurable=True,
                                                      width=Distance(cm=10), high=Distance(cm=10))
                 t_composition = Composition.objects.create(material=t_material, product=t_product1, quantity=1,
-                                                           is_side=True)
+                                                           position=Composition.Position.BASE)
                 Rule.objects.create(attribute=Rule.Attribute.choices[i][0], operation=Rule.Operation.choices[j][0],
                                     value=10, composition=t_composition)
 
@@ -36,12 +36,14 @@ class QuarteringTestCase(TestCase):
         # Create a composition on the side
         t_material12 = Material.objects.create(name=f'Material12', price=10, description=f'Descripción12',
                                                is_measurable=True, width=Distance(cm=10), high=Distance(cm=10))
-        Composition.objects.create(material=t_material12, product=t_product1, quantity=1, is_side=True)
+        Composition.objects.create(material=t_material12, product=t_product1, quantity=1,
+                                   position=Composition.Position.SIDE)
 
         # Create a composition on the base
         t_material13 = Material.objects.create(name=f'Material13', price=10, description=f'Descripción13',
                                                is_measurable=True, width=Distance(cm=10), high=Distance(cm=10))
-        Composition.objects.create(material=t_material13, product=t_product1, quantity=1, is_side=False)
+        Composition.objects.create(material=t_material13, product=t_product1, quantity=1,
+                                   position=Composition.Position.BASE)
 
         # Create quotation and the trigger should create a Quartering
         Quotation.objects.create(width=Distance(cm=10), high=Distance(cm=10), depth=Distance(cm=10), product=t_product1)
@@ -54,7 +56,8 @@ class QuarteringTestCase(TestCase):
                                                is_measurable=True, width=Distance(cm=10), high=Distance(cm=20))
 
         # 2 composition of material with price per unit 5
-        Composition.objects.create(material=t_material21, product=t_product2, quantity=2, is_side=True, name='Costado')
+        Composition.objects.create(material=t_material21, product=t_product2, quantity=2, name='Costado',
+                                   position=Composition.Position.SIDE)
 
         # Material no mesurable with price 50
         t_material22 = Material.objects.create(name=f'Material22', price=50, description=f'Descripción22')
@@ -63,7 +66,7 @@ class QuarteringTestCase(TestCase):
 
         # Another composition with 1 rule on the base
         t_composition23 = Composition.objects.create(material=t_material21, product=t_product2, quantity=1,
-                                                     is_side=False, name='Costado 2')
+                                                     name='Costado 2', position=Composition.Position.BASE)
         # Sub 1 to width (apply for the base)
         Rule.objects.create(attribute=Rule.Attribute.WIDTH, operation=Rule.Operation.SUBTRACT,
                             value=1, composition=t_composition23)
@@ -73,7 +76,7 @@ class QuarteringTestCase(TestCase):
 
     def test_quartering_sum_width(self):
         quartering = Quartering.objects.get(composition__material__name='Material1')
-        self.assertEquals(quartering.width, Distance(cm=0))
+        self.assertEquals(quartering.width, Distance(cm=20))
 
     def test_quartering_sub_width(self):
         quartering = Quartering.objects.get(composition__material__name='Material2')
@@ -81,11 +84,11 @@ class QuarteringTestCase(TestCase):
 
     def test_quartering_mul_width(self):
         quartering = Quartering.objects.get(composition__material__name='Material3')
-        self.assertEquals(quartering.width, Distance(cm=0))
+        self.assertEquals(quartering.width, Distance(cm=100))
 
     def test_quartering_sum_high(self):
         quartering = Quartering.objects.get(composition__material__name='Material4')
-        self.assertEquals(quartering.high, Distance(cm=20))
+        self.assertEquals(quartering.high, Distance(cm=0))
 
     def test_quartering_sub_high(self):
         quartering = Quartering.objects.get(composition__material__name='Material5')
@@ -93,7 +96,7 @@ class QuarteringTestCase(TestCase):
 
     def test_quartering_mul_high(self):
         quartering = Quartering.objects.get(composition__material__name='Material6')
-        self.assertEquals(quartering.high, Distance(cm=100))
+        self.assertEquals(quartering.high, Distance(cm=0))
 
     def test_quartering_sum_long(self):
         quartering = Quartering.objects.get(composition__material__name='Material7')

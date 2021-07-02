@@ -78,6 +78,11 @@ class Material(ObjectBasicData):
 
 
 class Composition(TimeStampedModel):
+    class Position(models.TextChoices):
+        FRONT = 'F', "Frontal"
+        BASE = 'B', "Base"
+        SIDE = 'S', 'Lateral'
+
     BOOL_CHOICES = ((True, 'Sí'), (False, 'No'), (None, 'No aplica'))
 
     name = models.CharField('Nombre', max_length=50, default='No aplica')
@@ -87,7 +92,7 @@ class Composition(TimeStampedModel):
     quantity = models.PositiveIntegerField('Cantidad')
     large_edge = models.PositiveSmallIntegerField('Canto largo', blank=True, null=True)
     short_edge = models.PositiveSmallIntegerField('Canto corto', blank=True, null=True)
-    is_side = models.BooleanField('Es lateral?', null=True, blank=True, choices=BOOL_CHOICES)
+    position = models.CharField('Posición', max_length=10, choices=Position.choices, blank=True, null=True)
 
     class Meta:
         verbose_name = "composición del producto"

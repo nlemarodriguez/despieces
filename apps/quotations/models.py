@@ -37,10 +37,12 @@ class Quartering(TimeStampedModel):
 
     @property
     def area(self):
-        if self.composition.is_side:
+        if self.composition.position == Composition.Position.SIDE:
             return Decimal(self.depth.value) * Decimal(self.high.value)
-        else:
+        elif self.composition.position == Composition.Position.BASE:
             return Decimal(self.depth.value) * Decimal(self.width.value)
+        elif self.composition.position == Composition.Position.FRONT:
+            return Decimal(self.width.value) * Decimal(self.high.value)
 
     class Meta:
         verbose_name = "despiece"
