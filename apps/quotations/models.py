@@ -32,8 +32,14 @@ class Quartering(TimeStampedModel):
     depth = MeasurementField(measurement=Distance, verbose_name='Profundidad', unit_choices=(("cm", "cm"), ("m", "m")),
                              null=True, blank=True)
     price = models.DecimalField('Precio del material', max_digits=10, decimal_places=2, null=True, blank=True)
+    edge_price = models.DecimalField('Precio del canto', max_digits=10, decimal_places=2, null=True, blank=True)
     quotation = models.ForeignKey(Quotation, verbose_name='Cotización', on_delete=models.CASCADE)
     composition = models.ForeignKey(Composition, verbose_name='Elemento', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField('Cantidad')
+
+    @property
+    def total_price(self):
+        return self.quantity * self.price
 
     @property
     def area(self):

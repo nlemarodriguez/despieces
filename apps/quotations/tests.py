@@ -22,7 +22,7 @@ class QuarteringTestCase(TestCase):
                 Rule.objects.create(attribute=Rule.Attribute.choices[i][0], operation=Rule.Operation.choices[j][0],
                                     value=10, composition=t_composition)
 
-        # Create composition with 5 quantity in order to generate 5 quartering
+        # Create composition with 5 quantity
         t_material10 = Material.objects.create(name=f'Material10', price=10, description=f'Descripción10')
         t_composition10 = Composition.objects.create(material=t_material10, product=t_product1, quantity=5)
         Rule.objects.create(attribute=Rule.Attribute.DEPTH, operation=Rule.Operation.MULTIPLY, value=10,
@@ -111,8 +111,8 @@ class QuarteringTestCase(TestCase):
         self.assertEquals(quartering.depth, Distance(cm=100))
 
     def test_composition_gt_one(self):
-        quartering = Quartering.objects.filter(composition__material__name='Material10').count()
-        self.assertEquals(quartering, 5)
+        quartering = Quartering.objects.get(composition__material__name='Material10')
+        self.assertEquals(quartering.quantity, 5)
 
     def test_composition_no_mesurable(self):
         quartering = Quartering.objects.get(composition__material__name='Material11')

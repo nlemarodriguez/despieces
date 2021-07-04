@@ -40,30 +40,29 @@ def create_quartering_for_quotation(sender, instance, created, **kwargs):
                     high = 0
                 elif composition.position == Composition.Position.FRONT:
                     depth = 0
-                # Create a quartering for each quantity of the composition
-                for _ in range(composition.quantity):
-                    quartering = Quartering(
-                        width=Distance(cm=width),
-                        high=Distance(cm=high),
-                        depth=Distance(cm=depth),
-                        quotation=instance,
-                        composition=composition,
-                    )
-                    # The quartering price is pondered from the material price
-                    quartering.price = composition.material.price_per_unit * quartering.area
-                    accumulated_price += quartering.price
-                    quartering_list.append(quartering)
+                quartering = Quartering(
+                    width=Distance(cm=width),
+                    high=Distance(cm=high),
+                    depth=Distance(cm=depth),
+                    quotation=instance,
+                    composition=composition,
+                    quantity=composition.quantity
+                )
+                # The quartering price is pondered from the material price
+                quartering.price = composition.material.price_per_unit * quartering.area
+                accumulated_price += quartering.price * composition.quantity
+                quartering_list.append(quartering)
             # Otherwise the quartering is just the material without measure
             else:
-                for _ in range(composition.quantity):
-                    price = composition.material.price
-                    quartering = Quartering(
-                        price=price,
-                        quotation=instance,
-                        composition=composition,
-                    )
-                    accumulated_price += price
-                    quartering_list.append(quartering)
+                price = composition.material.price
+                quartering = Quartering(
+                    price=price,
+                    quotation=instance,
+                    composition=composition,
+                    quantity=composition.quantity
+                )
+                accumulated_price += price * composition.quantity
+                quartering_list.append(quartering)
         Quartering.objects.bulk_create(quartering_list)
         instance.total_price = accumulated_price
         instance.save()

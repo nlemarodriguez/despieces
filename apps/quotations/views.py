@@ -34,16 +34,11 @@ class QuotationsDetail(ListView):
         # Filter the quartering of this quotation
         quartering_list = Quartering.objects.filter(quotation_id=self.kwargs['id'])
 
-        # Filter quartering no mesurable, group by material and get the price of each group
-        no_mesurable = quartering_list.filter(composition__material__is_measurable=False)\
-            .values('composition__material__name', 'price', 'composition__material__photo').order_by()\
-            .annotate(quantity_material=Count('composition_id'), total_price=Sum('price'))
-        # Add prefix MEDIA_URL to each quartering group
-        for q in no_mesurable:
-            q['composition__material__photo'] = settings.MEDIA_URL + q['composition__material__photo']
+        # Filter quartering no mesurable
+        no_mesurable = quartering_list.filter(composition__material__is_measurable=False)
 
         # Filter quartering mesurable
-        mesurable = list(filter(lambda x: x.composition.material.is_measurable is True, list(quartering_list)))
+        mesurable = quartering_list.filter(composition__material__is_measurable=True)
         context.update({
             'quartering_mesurable_list': mesurable,
             'quartering_no_mesurable_list': no_mesurable,

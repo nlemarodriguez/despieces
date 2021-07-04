@@ -83,15 +83,16 @@ class Composition(TimeStampedModel):
         BASE = 'B', "Base"
         SIDE = 'S', 'Lateral'
 
-    BOOL_CHOICES = ((True, 'Sí'), (False, 'No'), (None, 'No aplica'))
-
     name = models.CharField('Nombre', max_length=50, default='No aplica')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Producto', related_name='compositions')
     material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='Material',
                                  related_name='compositions')
     quantity = models.PositiveIntegerField('Cantidad')
-    large_edge = models.PositiveSmallIntegerField('Canto largo', blank=True, null=True)
-    short_edge = models.PositiveSmallIntegerField('Canto corto', blank=True, null=True)
+    with_edge = models.PositiveSmallIntegerField('Canto ancho', blank=True, null=True)
+    high_edge = models.PositiveSmallIntegerField('Canto alto', blank=True, null=True)
+    depth_edge = models.PositiveSmallIntegerField('Canto profundo', blank=True, null=True)
+    material_edge = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='Material de los cantos',
+                                      related_name='compositions_edge', blank=True, null=True)
     position = models.CharField('Posición', max_length=10, choices=Position.choices, blank=True, null=True)
 
     class Meta:
