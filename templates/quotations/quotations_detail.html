@@ -43,7 +43,7 @@
                             <dt class="col-3">Ancho:</dt>
                             <dd class="col-9">{{ quotation.width }}</dd>
                             <dt class="col-3">Largo:</dt>
-                            <dd class="col-9">{{ quotation.long }}</dd>
+                            <dd class="col-9">{{ quotation.depth }}</dd>
                             <dt class="col-3">Precio total:</dt>
                             <dd class="col-9"><strong>$ {{ quotation.total_price|floatformat:0 }}</strong></dd>
                         </dl>
@@ -87,23 +87,23 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <span class="avatar me-2"
-                                                          style="background-image: url({{ quartering.composition__material__photo }})"></span>
+                                                          style="background-image: url({{ quartering.composition.material.photo.url }})"></span>
                                                     <div class="flex-fill">
-                                                        <div class="font-weight-medium">{{ quartering.composition__material__name }}</div>
+                                                        <div class="font-weight-medium">{{ quartering.composition.material.name }}</div>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="text-muted">
                                                 <div class="font-weight-medium">
-                                                    $ {{ quartering.material_price|floatformat:0 }}</div>
+                                                    $ {{ quartering.price|floatformat:0 }}</div>
                                             </td>
                                             <td class="text-muted">
-                                                <div class="font-weight-medium">{{ quartering.quantity_material }}
-                                                    unidad{{ quartering.quantity_material|pluralize:",es" }}</div>
+                                                <div class="font-weight-medium">{{ quartering.quantity }}
+                                                    unidad{{ quartering.quantity|pluralize:",es" }}</div>
                                             </td>
                                             <td class="text-muted">
                                                 <div class="font-weight-medium">
-                                                    $ {{ quartering.price|floatformat:0 }}</div>
+                                                    $ {{ quartering.total_price|floatformat:0 }}</div>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -126,9 +126,11 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Nombre</th>
+                                        <th>Material</th>
                                         <th>Ancho</th>
                                         <th>Alto</th>
-                                        <th>Largo</th>
+                                        <th>Profundidad</th>
+                                        <th>Cantidad</th>
                                         <th>Precio total</th>
                                     </tr>
                                     </thead>
@@ -138,6 +140,9 @@
                                         <tr>
                                             <td>
                                                 <div>{{ forloop.counter }}</div>
+                                            </td>
+                                            <td>
+                                                <div>{{ quartering.composition.name }}</div>
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center">
@@ -155,11 +160,14 @@
                                                 <div>{{ quartering.high }}</div>
                                             </td>
                                             <td>
-                                                <div>{{ quartering.long }}</div>
+                                                <div>{{ quartering.depth }}</div>
+                                            </td>
+                                            <td>
+                                                <div>{{ quartering.quantity }}</div>
                                             </td>
                                             <td class="text-muted">
                                                 <div class="font-weight-medium">
-                                                    $ {{ quartering.composition.material.price|floatformat:0 }}</div>
+                                                    $ {{ quartering.total_price|floatformat:0 }}</div>
                                             </td>
                                         </tr>
                                     {% endfor %}

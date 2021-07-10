@@ -31,7 +31,7 @@ class QuotationAdmin(admin.ModelAdmin):
 
 @admin.register(Quartering)
 class QuarteringAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_material', 'width', 'high', 'long')
+    list_display = ('id', 'get_composition', 'get_material', 'quantity', 'get_position', 'width', 'high', 'depth')
 
     def get_quotation(self, obj):
         return obj.quotation
@@ -39,4 +39,14 @@ class QuarteringAdmin(admin.ModelAdmin):
 
     def get_material(self, obj):
         return obj.composition.material.name
-    get_material.short_description = 'material'
+    get_material.short_description = 'Material'
+
+    def get_composition(self, obj):
+        return obj.composition.name
+    get_composition.short_description = 'Composición'
+
+    def get_position(self, obj):
+        if obj.composition.position:
+            return Composition.Position(obj.composition.position).label
+    get_position.short_description = 'Posición'
+

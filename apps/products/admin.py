@@ -12,7 +12,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Composition)
 class CompositionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_product', 'get_material', 'quantity', 'get_rules')
+    list_display = ('name', 'get_product', 'get_material', 'quantity', 'get_rules')
     list_filter = ('product__name',)
     ordering = ('-product__name',)
 
@@ -40,15 +40,19 @@ class CompositionAdmin(admin.ModelAdmin):
 
 @admin.register(Rule)
 class RuleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_name', 'attribute', 'operation', 'value')
+    list_display = ('id', 'get_composition', 'get_name', 'attribute', 'operation', 'value')
     list_filter = ('composition__product__name',)
+
+    def get_composition(self, obj):
+        return obj.composition.name
+    get_composition.short_description = 'Nombre composición'
 
     def get_name(self, obj):
         return obj.composition
     get_name.short_description = 'Pertenece a'
 
     def get_form(self, request, obj=None, **kwargs):
-        # Only user marked as company can be selected as a Company of the user
+        # Only measurable materials
         form_user = super(RuleAdmin, self).get_form(request, obj, **kwargs)
         form_user.base_fields['composition'].queryset = Composition.objects.filter(material__is_measurable=True)
         return form_user
@@ -56,7 +60,7 @@ class RuleAdmin(admin.ModelAdmin):
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    list_display = ('name', 'formatted_price')
+    list_display = ('name', 'formatted_price', 'is_measurable', 'width', 'high', 'area', 'price_per_unit')
 
     def formatted_price(self, obj):
         return obj.price
