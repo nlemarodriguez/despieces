@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}{% with tab_title='Materiales' %}{{ block.super }}{% endwith %}{% endblock head %}
+{% block second_nav %}{% with selected='materials' %}{{ block.super }}{% endwith %}{% endblock second_nav %}
+{% block inner_title %} Listado de materiales {% endblock inner_title %}
+{% block sub_title %}
+{% endblock sub_title %}
+{% block inner_title_actions %}
+{% endblock inner_title_actions %}
+{% block content %}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title ">Materiales</h3>
+                <div class="ms-auto text-muted">
+                    <a href="#" class="btn btn-success btn-sm">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                             viewBox="0 0 24 24"
+                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Crear Material
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-body border-bottom py-3">
+                <div class="d-flex">
+                    <div class="text-muted">
+                        Mostrar
+                        <select>
+                            <option value="1">10</option>
+                        </select>
+                        materiales
+                    </div>
+                    <div class="ms-auto text-muted">
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="Buscar">
+                            <button class="btn" type="button">Ir</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table card-table table-vcenter text-nowrap datatable">
+                    <thead>
+                    <tr>
+                        <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox"
+                                               aria-label="Select all invoices"></th>
+                        <th class="w-1"># <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
+
+                        </th>
+                        <th>Nombre
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-sm text-dark icon-thick" width="24"
+                                 height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <polyline points="6 15 12 9 18 15"></polyline>
+                            </svg>
+                        </th>
+                        <th>Precio</th>
+                        <th>Es medible?</th>
+                        <th>Ancho</th>
+                        <th>Alto</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for material in materials_list %}
+
+                        <tr>
+                            <td><input class="form-check-input m-0 align-middle" type="checkbox"
+                                       aria-label="Select invoice"></td>
+                            <td><span class="text-muted">{{ forloop.counter }}</span></td>
+                            <td><a href="invoice.html" tabindex="-1">{{ material.name }}</a></td>
+                            <td>
+                                $ {{ material.price|floatformat:"0" }}
+                            </td>
+                            <td>
+                                {% if material.is_measurable %}
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/check -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon text-success" width="24"
+                                         height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M5 12l5 5l10 -10"/>
+                                    </svg>
+                                {% else %}
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/x -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon text-danger" width="24"
+                                         height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if material.is_measurable %}
+                                    {{ material.width.value|floatformat:"-2g" }} {{ material.width.unit }}
+                                {% else %}
+                                    n.a
+                                {% endif %}
+
+                            </td>
+                            <td>
+                                {% if material.is_measurable %}
+                                    {{ material.high.value|floatformat:"-2g" }} {{ material.high.unit }}
+                                {% else %}
+                                    n.a
+                                {% endif %}
+
+                            </td>
+                            <td class="text-end">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-info" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3"/>
+                                    <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3"/>
+                                    <line x1="16" y1="5" x2="19" y2="8"/>
+                                </svg>
+
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-danger" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <line x1="4" y1="7" x2="20" y2="7"/>
+                                    <line x1="10" y1="11" x2="10" y2="17"/>
+                                    <line x1="14" y1="11" x2="14" y2="17"/>
+                                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/>
+                                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>
+                                </svg>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer d-flex align-items-center">
+                <p class="m-0 text-muted">Mostrando <span>{{ page_obj.start_index }}</span> a
+                    <span>{{ page_obj.end_index }}</span> de <span>{{ paginator.count }}</span> materiales</p>
+
+
+                {% if is_paginated %}
+
+                    <ul class="pagination m-0 ms-auto">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1"
+                                   aria-disabled="true">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <polyline points="15 6 9 12 15 18"></polyline>
+                                    </svg>
+                                    anterior
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <polyline points="15 6 9 12 15 18"/>
+                                    </svg>
+                                    anterior
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% for page in paginator.page_range %}
+                            {% if page_obj.number == page %}
+                                <li class="page-item active"><a class="page-link">{{ page }}</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                    siguiente <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <polyline points="9 6 15 12 9 18"/>
+                                    </svg>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link">
+                                    siguiente <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <polyline points="9 6 15 12 9 18"/>
+                                    </svg>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
