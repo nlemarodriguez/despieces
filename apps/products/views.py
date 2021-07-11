@@ -1,5 +1,7 @@
 from django.db.models import Count
+from django.urls import reverse_lazy
 from django.views.generic import ListView
+from django.views.generic.edit import DeleteView
 from .models import Product, Composition, Rule, Material
 
 
@@ -20,5 +22,12 @@ class MaterialsList(ListView):
     context_object_name = 'materials_list'
     ordering = ['name']
     paginate_by = 10
+
+
+# Delete a single Material by id
+class MaterialDelete(DeleteView):
+    model = Material
+    success_url = reverse_lazy('products_app:materials_list')
+
 
 
