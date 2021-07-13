@@ -1,7 +1,10 @@
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Count
 from django.urls import reverse_lazy
-from django.views.generic import ListView
-from django.views.generic.edit import DeleteView
+from django.views.generic import ListView, DeleteView, CreateView, UpdateView
+
+from .forms import MaterialForm
 from .models import Product, Composition, Rule, Material
 
 
@@ -28,6 +31,33 @@ class MaterialsList(ListView):
 class MaterialDelete(DeleteView):
     model = Material
     success_url = reverse_lazy('products_app:materials_list')
+    success_message = "Material eliminado con éxito"
+
+    def delete(self, request, *args, **kwargs):
+        messages.warning(self.request, self.success_message)
+        return super(MaterialDelete, self).delete(request, *args, **kwargs)
+
+
+class MaterialCreate(CreateView):
+    model = Material
+    form_class = MaterialForm
+    template_name = 'products/material_create_update.html'
+    success_url = reverse_lazy('products_app:materials_list')
+
+    def form_valid(self, form):
+        material = form.save(commit=False)
+        material.user_owner = self.request.user
+        material.save()
+        messages.success(self.request, 'Material agregado con éxito')
+        return super(MaterialCreate, self).form_valid(form)
+
+
+class MaterialUpdate(SuccessMessageMixin, UpdateView):
+    model = Material
+    form_class = MaterialForm
+    template_name = 'products/material_create_update.html'
+    success_url = reverse_lazy('products_app:materials_list')
+    success_message = 'Material actualizado con éxito'
 
 
 

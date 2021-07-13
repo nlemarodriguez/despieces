@@ -8,12 +8,36 @@
 {% block inner_title_actions %}
 {% endblock inner_title_actions %}
 {% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                <div class="d-flex">
+                    <div>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="alert-icon" width="24" height="24"
+                             viewBox="0 0 24 24"
+                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M5 12l5 5l10 -10"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="alert-title">{{ message }}</h4>
+                    </div>
+                </div>
+                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <div class="col-12">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title ">Materiales</h3>
                 <div class="ms-auto text-muted">
-                    <a href="#" class="btn btn-success btn-sm">
+                    <a href="{% url 'products_app:material_create' %}" class="btn btn-success btn-sm">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                              viewBox="0 0 24 24"
@@ -121,16 +145,17 @@
                             </td>
                             <td class="text-end">
 
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-info" width="24" height="24"
-                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3"></path>
-                                    <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3"></path>
-                                    <line x1="16" y1="5" x2="19" y2="8"></line>
-                                </svg>
-
-
+                                <a href="{% url 'products_app:material_update' pk=material.id %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon text-info" width="24"
+                                         height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3"></path>
+                                        <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3"></path>
+                                        <line x1="16" y1="5" x2="19" y2="8"></line>
+                                    </svg>
+                                </a>
                                 <a href="{% url 'products_app:material_delete' pk=material.id %}" data-bs-toggle="modal"
                                    data-bs-target="#modal-danger" class="delete_item">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon text-danger" width="24"

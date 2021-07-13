@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}{% with tab_title='Materiales' %}{{ block.super }}{% endwith %}{% endblock head %}
+{% block second_nav %}{% with selected='materials' %}{{ block.super }}{% endwith %}{% endblock second_nav %}
+{% block inner_title %} Crear nuevo material {% endblock inner_title %}
+{% block sub_title %}
+{% endblock sub_title %}
+{% block inner_title_actions %}
+{% endblock inner_title_actions %}
+{% block content %}
+    <form method="post">{% csrf_token %}
+
+        <fieldset class="form-fieldset">
+            <div class="mb-3">
+                <label class="form-label required">Nombre</label>
+                {{ form.name }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label required">Descripción</label>
+                {{ form.description }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label required">Precio</label>
+                {{ form.price }}
+            </div>
+            <div class="mb-3">
+                <label class="form-check form-switch" data-toggle="collapse" data-target="#collapseSize">
+                    {{ form.is_measurable }}
+                    <span class="form-check-label">Es medible?</span>
+                </label>
+            </div>
+            <div class="panel-collapse collapse in" id="collapseSize">
+                <div class="input-group mb-2 ">
+                    {{ form.width }}
+                </div>
+                <div class="input-group mb-2 ">
+                    {{ form.high }}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Foto</label>
+                {{ form.photo }}
+            </div>
+
+        </fieldset>
+        <input type="submit" value="Guardar" class="btn btn-success">
+    </form>
+{% endblock content %}
+
+{% block local_js %}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script>
+        if ($('input[type=checkbox]').is(':checked')) {
+            $('.collapse').collapse();
+        }
+    </script>
+{% endblock %}
+
