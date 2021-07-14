@@ -74,6 +74,3 @@ class MaterialUpdate(SuccessMessageMixin, UpdateView):
     template_name = 'products/material_create_update.html'
     success_url = reverse_lazy('products_app:materials_list')
     success_message = 'Material actualizado con éxito'
-
-
-
