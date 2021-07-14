@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'apps.products.apps.ProductsConfig',
     'apps.quotations.apps.QuotationsConfig',
     'apps.users.apps.UsersConfig',
+    'apps.home.apps.HomeConfig',
     # third party apps
     'storages',
 ]
