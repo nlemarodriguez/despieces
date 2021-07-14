@@ -1,8 +1,6 @@
-from django.conf import settings
 from django.contrib import messages
-from django.db.models import Count, Sum
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DetailView
 
 from .forms import QuotationForm
 from .models import Quotation, Quartering
@@ -20,19 +18,16 @@ class QuotationsList(ListView):
 
 
 # Get single quotation with id in the url and add context its quartering mesurable and no mesurable
-class QuotationsDetail(ListView):
+class QuotationsDetail(DetailView):
     template_name = "quotations/quotations_detail.html"
     model = Quotation
     context_object_name = 'quotation'
-
-    def get_queryset(self):
-        return Quotation.objects.get(id=self.kwargs['id'])
 
     def get_context_data(self, **kwargs):
         context = super(QuotationsDetail, self).get_context_data(**kwargs)
 
         # Filter the quartering of this quotation
-        quartering_list = Quartering.objects.filter(quotation_id=self.kwargs['id'])
+        quartering_list = Quartering.objects.filter(quotation_id=self.kwargs['pk'])
 
         # Filter quartering no mesurable
         no_mesurable = quartering_list.filter(composition__material__is_measurable=False)
