@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView
 
@@ -25,6 +25,22 @@ class MaterialsList(ListView):
     context_object_name = 'materials_list'
     ordering = ['name']
     paginate_by = 10
+
+    def get_queryset(self):
+        name_to_filter = self.request.GET.get('filter', '')
+        user_request = self.request.user
+        query = Q(name__icontains=name_to_filter)
+        # Show only company's materials or the user company materials
+        if user_request.is_company or user_request.company is None:
+            query.add(Q(user_owner=user_request), Q.AND)
+        else:
+            query.add(Q(user_owner=user_request.company), Q.AND)
+        return Material.objects.filter(query).order_by('name')
+
+    def get_context_data(self, **kwargs):
+        context = super(MaterialsList, self).get_context_data(**kwargs)
+        context['filter'] = self.request.GET.get('filter', '')
+        return context
 
 
 # Delete a single Material by id

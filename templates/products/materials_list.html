@@ -55,20 +55,26 @@
             <div class="card-body border-bottom py-3">
                 <div class="d-flex">
                     <div class="text-muted">
-                        Mostrar
-                        <select>
-                            <option value="1">10</option>
-                        </select>
-                        materiales
-                    </div>
-                    <div class="ms-auto text-muted">
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" placeholder="Buscar">
-                            <button class="btn" type="button">Ir</button>
+                        <div class="d-inline">Mostrar</div>
+                        <div class=" d-inline">
+                            <select>
+                                <option value="10">10</option>
+                            </select>
                         </div>
+                        <div class="d-inline ">materiales</div>
+                    </div>
+
+                    <div class="ms-auto text-muted">
+                        <form action="{% url 'products_app:materials_list' %}" method="get">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Buscar" name="filter" value="{{ filter }}">
+                                <button class="btn" type="submit">Ir</button>
+                            </div>
+                        </form>
                     </div>
 
                 </div>
+
             </div>
             <div class="table-responsive">
                 <table class="table card-table table-vcenter text-nowrap datatable">
