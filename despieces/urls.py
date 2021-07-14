@@ -17,12 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 
+from apps.home import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.home.urls')),
     path('', include('apps.quotations.urls')),
     path('', include('apps.products.urls'))
 ]
+
+handler404 = 'despieces.views.custom_page_not_found_view'
+handler500 = 'despieces.views.custom_error_view'
 
 if settings.DEBUG:
     from django.conf.urls.static import static
