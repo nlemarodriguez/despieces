@@ -4,7 +4,7 @@ from django.db.models import Count, Sum
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 
-from .foms import QuotationForm
+from .forms import QuotationForm
 from .models import Quotation, Quartering
 from ..products.models import Product
 
