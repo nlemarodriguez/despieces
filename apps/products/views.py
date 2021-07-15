@@ -4,7 +4,7 @@ from django.db.models import Count, Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView
 
-from .forms import MaterialForm
+from .forms import MaterialForm, ProductForm
 from .models import Product, Composition, Rule, Material
 
 
@@ -74,3 +74,10 @@ class MaterialUpdate(SuccessMessageMixin, UpdateView):
     template_name = 'products/material_create_update.html'
     success_url = reverse_lazy('products_app:materials_list')
     success_message = 'Material actualizado con éxito'
+
+
+class ProductCreate(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'products/product_create.html'
+    success_url = reverse_lazy('products_app:products_list')

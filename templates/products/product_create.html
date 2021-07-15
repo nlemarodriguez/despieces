@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}{% with tab_title='Productos' %}{{ block.super }}{% endwith %}{% endblock head %}
+{% block second_nav %}{% with selected='products' %}{{ block.super }}{% endwith %}{% endblock second_nav %}
+{% block inner_title %} Crear nuevo producto {% endblock inner_title %}
+{% block sub_title %}
+{% endblock sub_title %}
+{% block inner_title_actions %}
+{% endblock inner_title_actions %}
+{% block content %}
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Guardar" class="btn btn-success">
+    </form>
+{% endblock content %}
+{% block local_js %}
+{% endblock %}
+

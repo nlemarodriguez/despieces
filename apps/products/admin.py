@@ -5,9 +5,15 @@ from django.utils.safestring import mark_safe
 from .models import *
 
 
+class CompositionInline(admin.TabularInline):
+    model = Composition
+    extra = 1
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'is_global', 'created', 'modified')
+    inlines = [CompositionInline]
 
 
 @admin.register(Composition)

@@ -1,8 +1,9 @@
 from django import forms
+from django.forms import ModelMultipleChoiceField, SelectMultiple
 from django_measurement.forms import MeasurementField
 from measurement.measures import Distance
 
-from .models import Material
+from .models import Material, Product
 
 
 class MaterialForm(forms.ModelForm):
@@ -23,3 +24,9 @@ class MaterialForm(forms.ModelForm):
                                                         'rows': '3'})
         self.fields['price'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Precio', 'min': '0'})
         self.fields['is_measurable'].widget.attrs.update({'class': 'form-check-input', 'type': 'checkbox'})
+
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'description', 'compositions']
