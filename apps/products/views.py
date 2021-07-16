@@ -1,10 +1,11 @@
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db import transaction
 from django.db.models import Count, Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView
 
-from .forms import MaterialForm, ProductForm
+from .forms import MaterialForm, ProductForm, CompositionFormSet
 from .models import Product, Composition, Rule, Material
 
 
@@ -15,7 +16,7 @@ class ProductsList(ListView):
     context_object_name = 'products_list'
 
     def get_queryset(self):
-        return Product.objects.annotate(rules=Count('compositions__rules'))
+        return Product.objects.annotate(rules=Count('compositions_set__rules'))
 
 
 # Get the list of materials
@@ -81,3 +82,24 @@ class ProductCreate(CreateView):
     form_class = ProductForm
     template_name = 'products/product_create.html'
     success_url = reverse_lazy('products_app:products_list')
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductCreate, self).get_context_data(**kwargs)
+        context['composition_form'] = CompositionFormSet()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        compositions_form = CompositionFormSet(self.request.POST)
+
+        if form.is_valid() and compositions_form.is_valid():
+            return self.form_valid(form, compositions_form)
+
+    def form_valid(self, form, compositions_form):
+
+        self.object = form.save()
+        compositions_form.instance = self.object
+        compositions_form.save()
+        return super(ProductCreate, self).form_valid(form)
