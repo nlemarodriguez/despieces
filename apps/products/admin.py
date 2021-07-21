@@ -10,10 +10,15 @@ class CompositionInline(admin.TabularInline):
     extra = 1
 
 
+class ProductMediaInline(admin.TabularInline):
+    model = ProductMedia
+    extra = 1
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'is_global', 'created', 'modified')
-    inlines = [CompositionInline]
+    inlines = [CompositionInline, ProductMediaInline]
 
 
 @admin.register(Composition)
@@ -54,7 +59,7 @@ class RuleAdmin(admin.ModelAdmin):
     get_composition.short_description = 'Nombre composición'
 
     def get_name(self, obj):
-        return obj.composition
+        return obj.composition.product
     get_name.short_description = 'Pertenece a'
 
     def get_form(self, request, obj=None, **kwargs):

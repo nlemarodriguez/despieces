@@ -87,7 +87,7 @@ class Composition(TimeStampedModel):
         SIDE = 'S', 'Lateral'
 
     name = models.CharField('Nombre', max_length=50, default='No aplica')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Producto')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Producto', related_name='compositions_set')
     material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='Material')
     quantity = models.PositiveIntegerField('Cantidad')
     with_edge = models.PositiveSmallIntegerField('Canto ancho', blank=True, null=True)

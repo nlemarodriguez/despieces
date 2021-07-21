@@ -85,21 +85,22 @@ class ProductCreate(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(ProductCreate, self).get_context_data(**kwargs)
-        context['composition_form'] = CompositionFormSet()
+        if self.request.POST:
+            context['composition_form'] = CompositionFormSet(self.request.POST)
+        else:
+            context['composition_form'] = CompositionFormSet()
         return context
 
-    def post(self, request, *args, **kwargs):
-        self.object = None
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        compositions_form = CompositionFormSet(self.request.POST)
+    def form_valid(self, form):
+        context = self.get_context_data()
+        compositions_form = context['composition_form']
+        with transaction.atomic():
+            if compositions_form.is_valid() and form.is_valid():
+                self.object = form.save()
+                compositions_form.instance = self.object
+                compositions_form.save()
+                return super(ProductCreate, self).form_valid(form)
+            else:
+                return super(ProductCreate, self).form_invalid(form)
 
-        if form.is_valid() and compositions_form.is_valid():
-            return self.form_valid(form, compositions_form)
 
-    def form_valid(self, form, compositions_form):
-
-        self.object = form.save()
-        compositions_form.instance = self.object
-        compositions_form.save()
-        return super(ProductCreate, self).form_valid(form)

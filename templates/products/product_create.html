@@ -9,8 +9,57 @@
 {% endblock inner_title_actions %}
 {% block content %}
     <form method="post">{% csrf_token %}
-        {{ form.as_p }}
+        <fieldset class="form-fieldset">
+            <div class="mb-3">
+                <label class="form-label required">Nombre</label>
+                {{ form.name }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label required">Descripción</label>
+                {{ form.description }}
+            </div>
+
+
+            {{ composition_form.management_form }}
+            <div class="col-12">
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table table-vcenter card-table table-striped">
+
+                            {% for form in composition_form.forms %}
+                                {% if forloop.first %}
+                                    <thead>
+                                    <tr>
+                                        {% for field in form.visible_fields %}
+                                            <th>{{ field.label|capfirst }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                    </thead>
+                                {% endif %}
+                                <tbody>
+                                <tr class="{% cycle row1 row2 %} formset_row">
+                                    {% for field in form.visible_fields %}
+                                        <td>
+                                            {# Include the hidden fields in the form #}
+                                            {% if forloop.first %}
+                                                {% for hidden in form.hidden_fields %}
+                                                    {{ hidden }}
+                                                {% endfor %}
+                                            {% endif %}
+                                            {{ field.errors.as_ul }}
+                                            {{ field }}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
         <input type="submit" value="Guardar" class="btn btn-success">
+
     </form>
 {% endblock content %}
 {% block local_js %}
