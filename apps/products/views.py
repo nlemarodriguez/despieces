@@ -1,10 +1,11 @@
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db import transaction
 from django.db.models import Count, Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView
 
-from .forms import MaterialForm
+from .forms import MaterialForm, ProductForm, CompositionFormSet
 from .models import Product, Composition, Rule, Material
 
 
@@ -15,7 +16,7 @@ class ProductsList(ListView):
     context_object_name = 'products_list'
 
     def get_queryset(self):
-        return Product.objects.annotate(rules=Count('compositions__rules'))
+        return Product.objects.annotate(rules=Count('compositions_set__rules'))
 
 
 # Get the list of materials
@@ -74,3 +75,32 @@ class MaterialUpdate(SuccessMessageMixin, UpdateView):
     template_name = 'products/material_create_update.html'
     success_url = reverse_lazy('products_app:materials_list')
     success_message = 'Material actualizado con éxito'
+
+
+class ProductCreate(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'products/product_create.html'
+    success_url = reverse_lazy('products_app:products_list')
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductCreate, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['composition_form'] = CompositionFormSet(self.request.POST)
+        else:
+            context['composition_form'] = CompositionFormSet()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        compositions_form = context['composition_form']
+        with transaction.atomic():
+            if compositions_form.is_valid() and form.is_valid():
+                self.object = form.save()
+                compositions_form.instance = self.object
+                compositions_form.save()
+                return super(ProductCreate, self).form_valid(form)
+            else:
+                return super(ProductCreate, self).form_invalid(form)
+
+

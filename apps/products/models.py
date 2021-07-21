@@ -18,34 +18,6 @@ class ObjectBasicData(TimeStampedModel):
         abstract = True
 
 
-class Product(ObjectBasicData):
-
-    class Meta:
-        verbose_name = "producto"
-        verbose_name_plural = 'productos'
-        ordering = ["-created"]
-
-    def __str__(self):
-        return f'{self.name}'
-
-
-def custom_upload_product_media(instance, file_name):
-    return f"user_{instance.product.user_owner.id}/product_{instance.product.id}/photos/{file_name}"
-
-
-class ProductMedia(TimeStampedModel):
-    media = models.ImageField(upload_to=custom_upload_product_media)
-    product = models.ForeignKey(Product, verbose_name='Producto', on_delete=models.CASCADE, related_name='photos')
-
-    class Meta:
-        verbose_name = "fotos del producto"
-        verbose_name_plural = 'fotos de los productos'
-        ordering = ["-created"]
-
-    def __str__(self):
-        return f'Foto de {self.product.name}'
-
-
 def custom_upload_material_media(instance, file_name):
     return f"user_{instance.user_owner.id}/material_{instance.product.id}/photos/{file_name}"
 
@@ -77,6 +49,37 @@ class Material(ObjectBasicData):
         return f'{self.name}'
 
 
+class Product(ObjectBasicData):
+
+    compositions = models.ManyToManyField(Material, related_name='products', through='Composition', blank=True,
+                                          through_fields=('product', 'material'))
+
+    class Meta:
+        verbose_name = "producto"
+        verbose_name_plural = 'productos'
+        ordering = ["-created"]
+
+    def __str__(self):
+        return f'{self.name}'
+
+
+def custom_upload_product_media(instance, file_name):
+    return f"user_{instance.product.user_owner.id}/product_{instance.product.id}/photos/{file_name}"
+
+
+class ProductMedia(TimeStampedModel):
+    media = models.ImageField(upload_to=custom_upload_product_media)
+    product = models.ForeignKey(Product, verbose_name='Producto', on_delete=models.CASCADE, related_name='photos')
+
+    class Meta:
+        verbose_name = "fotos del producto"
+        verbose_name_plural = 'fotos de los productos'
+        ordering = ["-created"]
+
+    def __str__(self):
+        return f'Foto de {self.product.name}'
+
+
 class Composition(TimeStampedModel):
     class Position(models.TextChoices):
         FRONT = 'F', "Frontal"
@@ -84,9 +87,8 @@ class Composition(TimeStampedModel):
         SIDE = 'S', 'Lateral'
 
     name = models.CharField('Nombre', max_length=50, default='No aplica')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Producto', related_name='compositions')
-    material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='Material',
-                                 related_name='compositions')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Producto', related_name='compositions_set')
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='Material')
     quantity = models.PositiveIntegerField('Cantidad')
     with_edge = models.PositiveSmallIntegerField('Canto ancho', blank=True, null=True)
     high_edge = models.PositiveSmallIntegerField('Canto alto', blank=True, null=True)
