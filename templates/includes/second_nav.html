@@ -21,10 +21,13 @@
                             </span>
                         </a>
                     </li> <!-- Finish Inicio li -->
-                    <li class="nav-item {% if selected == 'products' %}active{% endif %} dropdown">
-                        <!-- Begin productos li-->
-                        <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" role="button"
-                           aria-expanded="false">
+                    {% if user.is_authenticated %}
+                        {% if user.is_company or user.company == None %}
+                            <li class="nav-item {% if selected == 'products' %}active{% endif %} dropdown">
+                                <!-- Begin productos li-->
+                                <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown"
+                                   role="button"
+                                   aria-expanded="false">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                      viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -37,25 +40,26 @@
                                     <line x1="16" y1="5.25" x2="8" y2="9.75"></line>
                                 </svg>
                             </span>
-                            <span class="nav-link-title">
+                                    <span class="nav-link-title">
                                 Productos
                             </span>
-                        </a>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-menu-columns">
-                                <div class="dropdown-menu-column">
-                                    <a class="dropdown-item" href="{% url 'products_app:product_create' %}">
-                                        Crear producto
-                                    </a>
-                                    <a class="dropdown-item" href="{% url 'products_app:products_list' %}">
-                                        Ver productos
-                                    </a>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-menu-columns">
+                                        <div class="dropdown-menu-column">
+                                            <a class="dropdown-item" href="{% url 'products_app:product_create' %}">
+                                                Crear producto
+                                            </a>
+                                            <a class="dropdown-item" href="{% url 'products_app:products_list' %}">
+                                                Ver productos
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </li> <!-- Finish productos li-->
-                    <li class="nav-item {% if selected == 'materials' %}active{% endif %}"> <!-- Begin materiales li-->
-                        <a class="nav-link" href="{% url 'products_app:materials_list' %}">
+                            </li> <!-- Finish productos li-->
+                            <li class="nav-item {% if selected == 'materials' %}active{% endif %}">
+                                <!-- Begin materiales li-->
+                                <a class="nav-link" href="{% url 'products_app:materials_list' %}">
                             <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -72,16 +76,18 @@
                                   <line x1="1" y1="14" x2="4" y2="14"></line>
                               </svg>
                             </span>
-                            <span class="nav-link-title">
+                                    <span class="nav-link-title">
                                 Materiales
                             </span>
-                        </a>
-                    </li> <!-- End materiales li-->
+                                </a>
+                            </li> <!-- End materiales li-->
+                        {% endif %}
 
-                    <li class="nav-item {% if selected == 'quotations' %}active{% endif %} dropdown">
-                        <!-- Begin despieces li-->
-                        <a class="nav-link dropdown-toggle" href="#navbar-extra" data-bs-toggle="dropdown" role="button"
-                           aria-expanded="false">
+                        <li class="nav-item {% if selected == 'quotations' %}active{% endif %} dropdown">
+                            <!-- Begin cotizaciones li-->
+                            <a class="nav-link dropdown-toggle" href="#navbar-extra" data-bs-toggle="dropdown"
+                               role="button"
+                               aria-expanded="false">
                             <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/star -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                      viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -90,19 +96,20 @@
                                     <path d="M3 9h18M9 21V9"></path>
                                 </svg>
                             </span>
-                            <span class="nav-link-title">
+                                <span class="nav-link-title">
                                 Cotizaciones
                             </span>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{% url 'quotations_app:quotations_list' %}">
-                                Recientes
                             </a>
-                            <a class="dropdown-item" href="{% url 'quotations_app:quotations_create' %}">
-                                Nueva
-                            </a>
-                        </div>
-                    </li> <!-- Finish despieces li-->
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{% url 'quotations_app:quotations_list' %}">
+                                    Recientes
+                                </a>
+                                <a class="dropdown-item" href="{% url 'quotations_app:quotations_create' %}">
+                                    Nueva
+                                </a>
+                            </div>
+                        </li> <!-- Finish cotizaciones li-->
+                    {% endif %}
                 </ul>
             </div>
         </div>
