@@ -7,6 +7,7 @@ from django.views.generic import ListView, DeleteView, CreateView, UpdateView
 
 from .forms import MaterialForm, ProductForm, CompositionFormSet
 from .models import Product, Composition, Rule, Material
+from ..util.permissions import CompanyLoginRequiredMixin
 
 
 # Get the list of products
@@ -20,7 +21,7 @@ class ProductsList(ListView):
 
 
 # Get the list of materials
-class MaterialsList(ListView):
+class MaterialsList(CompanyLoginRequiredMixin, ListView):
     template_name = "products/materials_list.html"
     model = Material
     context_object_name = 'materials_list'
@@ -45,7 +46,7 @@ class MaterialsList(ListView):
 
 
 # Delete a single Material by id
-class MaterialDelete(DeleteView):
+class MaterialDelete(CompanyLoginRequiredMixin, DeleteView):
     model = Material
     success_url = reverse_lazy('products_app:materials_list')
     success_message = "Material eliminado con éxito"
@@ -55,7 +56,7 @@ class MaterialDelete(DeleteView):
         return super(MaterialDelete, self).delete(request, *args, **kwargs)
 
 
-class MaterialCreate(CreateView):
+class MaterialCreate(CompanyLoginRequiredMixin, CreateView):
     model = Material
     form_class = MaterialForm
     template_name = 'products/material_create_update.html'
@@ -69,7 +70,7 @@ class MaterialCreate(CreateView):
         return super(MaterialCreate, self).form_valid(form)
 
 
-class MaterialUpdate(SuccessMessageMixin, UpdateView):
+class MaterialUpdate(CompanyLoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Material
     form_class = MaterialForm
     template_name = 'products/material_create_update.html'
@@ -77,7 +78,7 @@ class MaterialUpdate(SuccessMessageMixin, UpdateView):
     success_message = 'Material actualizado con éxito'
 
 
-class ProductCreate(CreateView):
+class ProductCreate(CompanyLoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'products/product_create.html'
