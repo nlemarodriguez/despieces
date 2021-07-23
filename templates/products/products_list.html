@@ -6,7 +6,7 @@
 {% block sub_title %}
     <div class="text-muted mt-1">
         {% with total_products=products_list.count %}
-            1-{{ total_products }} de {{ total_products }} producto{{ total|pluralize }}
+            1-{{ total_products }} de {{ total_products }} producto{{ total_products|pluralize }}
         {% endwith %}
     </div>
 {% endblock sub_title %}
@@ -101,6 +101,8 @@
                     </div>
                 </div>
             </div>
+        {% empty %}
+            <li>No existen productos creados</li>
         {% endfor %}
     </div>
     <div class="d-flex"> <!-- Begin pagination -->
