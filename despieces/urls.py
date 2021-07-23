@@ -22,9 +22,12 @@ from apps.home import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.home.urls')),
+    path('', include('apps.registration.urls')),
     path('', include('apps.quotations.urls')),
     path('', include('apps.products.urls'))
 ]
+
+
 
 handler404 = 'despieces.views.custom_page_not_found_view'
 handler500 = 'despieces.views.custom_error_view'

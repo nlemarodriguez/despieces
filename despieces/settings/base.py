@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # local apps
     'apps.products.apps.ProductsConfig',
+    'apps.registration.apps.RegistrationConfig',
     'apps.quotations.apps.QuotationsConfig',
     'apps.users.apps.UsersConfig',
     'apps.home.apps.HomeConfig',
@@ -105,3 +106,8 @@ DECIMAL_SEPARATOR = ','
 # Custom user
 
 AUTH_USER_MODEL = 'users.User'
+
+# Login custom behaviour
+
+LOGIN_REDIRECT_URL = 'home_app:home_index'
+LOGOUT_REDIRECT_URL = 'home_app:home_index'
