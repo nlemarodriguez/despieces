@@ -111,3 +111,5 @@ AUTH_USER_MODEL = 'users.User'
 
 LOGIN_REDIRECT_URL = 'home_app:home_index'
 LOGOUT_REDIRECT_URL = 'home_app:home_index'
+
+LOGIN_URL = 'registration_app:login'
