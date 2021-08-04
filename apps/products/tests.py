@@ -32,7 +32,6 @@ class ProductListTest(TestCase):
 
 
 class MaterialListTest(TestCase):
-
     def setUp(self):
         self.client = Client()
         User.objects.create_user('company_without_materials@a.com', 'Admin00', is_company=True)
@@ -72,3 +71,51 @@ class MaterialListTest(TestCase):
         self.client.login(username='company_with_materials@a.com', password='Admin00')
         response = self.client.get(reverse(f'products_app:materials_list'))
         self.assertEquals(response.context['materials_list'][0].name, 'material1')
+
+
+class MaterialDeleteTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.client = Client()
+        User.objects.create_user('company_without_material@a.com', 'Admin00', is_company=True)
+        company_with_materials = User.objects.create_user('company_with_material@a.com', 'Admin00', is_company=True)
+        User.objects.create_user('dependent_user@a.com', 'Admin00', company=company_with_materials)
+        User.objects.create_user('independent_user@a.com', 'Admin00')
+        Material.objects.create(name='material1', description='material1', price=1, user_owner=company_with_materials)
+        Material.objects.create(name='material2', description='material2', price=1)
+
+    def test_company_permissions(self):
+        # Not logged user is redirect to login page
+        response = self.client.post(reverse(f'products_app:material_delete', kwargs={'pk': 1}))
+        self.assertRedirects(response, '/cuenta/login/?next=/materiales/1/borrar/')
+
+        # Only companies can access (or independent user)
+        self.client.login(username='dependent_user@a.com', password='Admin00')
+        response = self.client.post(reverse(f'products_app:material_delete', kwargs={'pk': 1}))
+        self.assertEqual(response.status_code, 403)
+
+    def test_delete_material(self):
+        # Company can access, but only the owner can delete it, otherwise the user get 404 error
+        self.client.login(username='company_without_material@a.com', password='Admin00')
+        response = self.client.post(reverse(f'products_app:material_delete', kwargs={'pk': 1}))
+        self.assertEqual(response.status_code, 404)
+
+        # Company owner can delete his materials
+        self.client.login(username='company_with_material@a.com', password='Admin00')
+        response = self.client.post(reverse(f'products_app:material_delete', kwargs={'pk': 1}), follow=True)
+        self.assertEqual(response.status_code, 200)
+
+
+class MaterialCreateTest(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        User.objects.create_user('company@a.com', 'Admin00', is_company=True)
+
+    def test_create_material(self):
+        self.client.login(username='company@a.com', password='Admin00')
+        response = self.client.post(reverse(f'products_app:material_create'), follow=True)
+        print('111', response.context['form'].errors)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Material agregado con éxito")
