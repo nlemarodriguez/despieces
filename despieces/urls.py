@@ -28,7 +28,6 @@ urlpatterns = [
 ]
 
 
-
 handler404 = 'despieces.views.custom_page_not_found_view'
 handler500 = 'despieces.views.custom_error_view'
 handler403 = 'despieces.views.custom_permission_view'
