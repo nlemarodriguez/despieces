@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import transaction
 from django.db.models import Count, Q
+from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView
 
@@ -52,8 +53,12 @@ class MaterialDelete(CompanyLoginRequiredMixin, DeleteView):
     success_message = "Material eliminado con éxito"
 
     def delete(self, request, *args, **kwargs):
-        messages.warning(self.request, self.success_message)
-        return super(MaterialDelete, self).delete(request, *args, **kwargs)
+        # Only the material's owner user can delete it
+        if self.get_object().user_owner == request.user:
+            messages.warning(self.request, self.success_message)
+            return super(MaterialDelete, self).delete(request, *args, **kwargs)
+        else:
+            raise Http404
 
 
 class MaterialCreate(CompanyLoginRequiredMixin, CreateView):

@@ -310,6 +310,7 @@
 
 {% block local_js %}
     <script>
+    // Change the action in the modal confirm button to delete
         let buttons = document.getElementsByClassName('delete_item');
         for (let i = 0; i < buttons.length; i++) {
             buttons[i].addEventListener('click', () => {
