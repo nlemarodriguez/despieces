@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # local apps
     'apps.products.apps.ProductsConfig',
-    'apps.registration.apps.RegistrationConfig',
     'apps.quotations.apps.QuotationsConfig',
     'apps.users.apps.UsersConfig',
     'apps.home.apps.HomeConfig',
