@@ -10,13 +10,26 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+
+import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
+# Initiate external library to load environment variables
+env = environ.Env()
+
+# Load environment variables from a file only if exists,
+if os.path.exists(BASE_DIR / 'despieces/settings/.env'):
+    environ.Env.read_env()
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env('SECRET_KEY')
+
+DEBUG = env('DEBUG', bool)
+
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 # Application definition
 
@@ -48,6 +61,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'despieces.urls'
+
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+DATABASES = {
+    'default': env.db(),
+}
 
 TEMPLATES = [
     {
@@ -112,3 +131,30 @@ LOGIN_REDIRECT_URL = 'home_app:home_index'
 LOGOUT_REDIRECT_URL = 'home_app:home_index'
 
 LOGIN_URL = 'registration_app:login'
+
+# AWS configurations
+USE_S3 = env('USE_S3', bool)
+if USE_S3:
+    AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400', }
+    AWS_LOCATION = 'static'
+
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+    STATICFILES_STORAGE = 'despieces.settings.storage_backends.StaticStorage'
+
+    PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+    DEFAULT_FILE_STORAGE = 'despieces.settings.storage_backends.PublicMediaStorage'
+
+else:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
+    STATICFILES_DIRS = [BASE_DIR / 'static', ]
+
+    MEDIA_DIR = BASE_DIR / 'media'
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = MEDIA_DIR
