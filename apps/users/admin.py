@@ -6,8 +6,8 @@ from .forms import *
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
-    add_form = CustomUserCreationForm
-    form = CustomUserChangeForm
+    add_form = CustomUserCreationFormAdmin
+    form = CustomUserChangeFormAdmin
     model = User
     list_display = ('first_name', 'email', 'is_superuser', 'is_staff', 'is_active',)
     list_filter = ('is_superuser', 'is_staff', 'is_active',)

@@ -5,15 +5,13 @@ from django import forms
 from .models import User
 
 
-class CustomUserCreationForm(UserCreationForm):
-
+class CustomUserCreationFormAdmin(UserCreationForm):
     class Meta(UserCreationForm):
         model = User
         fields = '__all__'
 
 
-class CustomUserChangeForm(UserChangeForm):
-
+class CustomUserChangeFormAdmin(UserChangeForm):
     class Meta:
         model = User
         fields = '__all__'
@@ -29,3 +27,23 @@ class UserLoginForm(AuthenticationForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control',
                                                                  'placeholder': 'Digita tu contraseña',
                                                                  'autocomplete': 'off'}))
+
+
+class UserRegisterForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'password1', 'password2', 'email']
+
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digita tu email',
+                                                           'autofocus': 'autofocus'}), label='Dirección de correo')
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control',
+                                                               'placeholder': 'Digita tus nombres'}), label='Nombres')
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control',
+                                                              'placeholder': 'Digita tus apellidos'}),
+                                label='Apellidos')
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                                                  'placeholder': 'Digita tu contraseña'}),
+                                label='Contraseña')
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                                                  'placeholder': 'Digita tu contraseña nuevamente'}),
+                                label='Confirmar contraseña')
