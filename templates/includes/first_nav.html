@@ -55,7 +55,7 @@
             {% endif %}
 
             <div class="nav-item dropdown">
-                <a href="{% if not user.is_authenticated %}{% url 'registration_app:login' %}{% endif %}"
+                <a href="{% if not user.is_authenticated %}{% url 'users_app:login' %}{% endif %}"
                    class="nav-link d-flex lh-1 text-reset p-0"
                    data-bs-toggle="{% if user.is_authenticated %}dropdown{% endif %}"
                    aria-label="Open user menu">
@@ -79,7 +79,7 @@
                     <a href="#" class="dropdown-item">Perfil & Cuenta</a>
                     <div class="dropdown-divider"></div>
                     <a href="#" class="dropdown-item">Configuraciones</a>
-                    <a href="{% url 'registration_app:logout' %}" class="dropdown-item">Salir</a>
+                    <a href="{% url 'users_app:logout' %}" class="dropdown-item">Salir</a>
                 </div>
             </div>
         </div>
